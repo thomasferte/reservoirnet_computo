@@ -1,0 +1,16 @@
+.Rhistory
+.Rprofile
+.Rapp.history
+.RData
+.Ruserdata
+/*.Rcheck/
+.Rproj.user/
+*_cache/
+/cache/
+*_files/
+template-computo-R.html
+logo_text_white.pdf
+template-computo-R.pdf
+/.quarto/
+_extensions/
+renv/

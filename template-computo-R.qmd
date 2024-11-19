@@ -1,0 +1,313 @@
+---
+title: "Template for contribution to Computo"
+subtitle: "Example dedicated to `R` users"
+author:
+  - name: Jane Doe
+    corresponding: true
+    email: janedoe@nowhere.moon
+    url: https://janedoe.someplace.themoon.org
+    orcid: 0000-0000-0000-0000
+    affiliations:
+      - name: Name of Affiliation one
+        department: Statistics
+        url: https://someplace.themoon.org
+  - name: John Doe
+    email: johndoe@nowhere.moon
+    url: https://johndoe.someplace.themoon.org
+    orcid: 0000-0000-0000-0000
+    affiliations:
+      - name: Name of Afficiliation two
+        department: Computer Science
+        url: https://someplace.themoon.org
+date: last-modified
+date-modified: last-modified
+description: |
+  This document provides a template based on the [`quarto`](https://quarto.org/) system for contributions to Computo, using the [`quarto journal extension`](https://github.com/computorg/computo-quarto-extension), the knitr kernel (R user) and [`renv`](https://rstudio.github.io/renv/articles/renv.html) to set-up the dependencies.
+abstract: >+
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur posuere vestibulum facilisis. Aenean pretium orci augue, quis lobortis libero accumsan eu. Nam mollis lorem sit amet pellentesque ullamcorper. Curabitur lobortis libero eget malesuada vestibulum. Nam nec nibh massa. Pellentesque porttitor cursus tellus. Mauris urna erat, rhoncus sed faucibus sit amet, venenatis eu ipsum.
+keywords: [key1, key2, key3]
+citation:
+  type: article-journal
+  container-title: "Computo"
+  doi: "xxxx"
+  url: https://computo.sfds.asso.fr/template-computo-quarto
+  publisher: "Société Française de Statistique"
+  issn: "2824-7795"
+bibliography: references.bib
+github-user: computorg
+repo: "template-computo-r"
+draft: true # set to false once the build is running
+published: false # will be set to true once accepted
+format:
+  computo-html: default
+  computo-pdf: default
+---
+
+# Introduction
+
+## About this document
+
+This document, accompanied with the [hopefully finely tuned git repos](https://github.com/computorg/template-computo-R/), provides a template for writing contributions to **Computo** [@computo]. We show how `R` code [@R-base] can be included and how the repository can be set up for triggering github actions for rendering the document, with dependencies handled by `renv`.
+
+## Setup a github repository for preparing your submission
+
+You can start by clicking the **"use this template"** button, on the top of the page of the [github repository associated to this document](https://github.com/computorg/template-computo-R/). Of course, you can set your repository private during the preparation of your manuscript.
+
+## Quarto
+
+[Quarto](https://quarto.org/) is a versatile formatting system for authoring documents integrating markdown, LaTeX and code blocks interpreted either via Jupyter or Knitr (thus supporting Python, R and Julia). It relies on the [Pandoc](https://pandoc.org/MANUAL.html) document converter.
+
+## Requirements
+
+You need [quarto](https://quarto.org/) installed on your system and the [Computo extension](https://github.com/computorg/computo-quarto-extension) to prepare your document. For the latter, once quarto is installed,  run the following to install the extension in the current directory (it creates a `_extension` directory which is ignored by git thanks to `.gitignore` by default):
+
+```.bash
+quarto add computorg/computo-quarto-extension
+```
+
+[`R`](https://www.r-project.org/) and the following `R` packages must be installed on your computer: [`knitr`](https://cran.r-project.org/package=knitr), [`markdown`](https://cran.r-project.org/package=markdown).
+
+## Link with your usual tools
+
+Quarto is expecting a `.qmd` markdown file, but will also works with a standard [`Rmarkdown`](https://rmarkdown.rstudio.com/) (`.Rmd`) file. In addition, especially if you are not comfortable with the command line interface, quarto is fully integrated inside the [Rstudio IDE](https://quarto.org/docs/get-started/hello/rstudio.html) so that you can write and build your quarto document inside Rstudio.
+
+Quarto can also process a [Jupyter notebook](https://quarto.org/docs/get-started/hello/jupyter.html) file if you are used to it (it will just require to add the proper YAML metadata^[the same metadata as in the [`template-computo-R.qmd` file](https://github.com/computorg/template-computo-R/blob/main/template-computo-R.qmd) in the first cell, type "Raw", of the notebook]).
+
+**Note**: _More advanced Jupyter-related functionality like Myst/Jupyter book are not supported in this Quarto setup. The markdown syntax inside the Jupyter notebook should follow the Quarto syntax (c.f. [below](#formatting)). If you are more comfortable with using Myst/Jupyter book, we provide a [specific template](https://github.com/computorg/template-computo-myst) but it will requires more formatting work for Computo editorial team, thus highly encourage authors to use the Quarto templates._
+
+# Formatting
+
+This section covers basic formatting guidelines for quarto documents.
+
+To render a document, run `quarto render`. By default, both PDF and HTML documents are generated:
+
+```.bash
+quarto render template-computo-R.qmd # will render both to html and PDF
+```
+
+::: {.callout-tip}
+## Note
+
+To check the syntax of the formatting below, you can use the `</> source` button at the top left of this document.
+:::
+
+## Basic markdown formatting
+
+**Bold text** or _italic_
+
+- This is a list
+- With more elements
+- It isn't numbered.
+
+But we can also do a numbered list
+
+1. This is my first item
+2. This is my second item
+3. This is my third item
+
+## Mathematics
+
+### Mathematical formulae
+
+[LaTeX](https://www.latex-project.org/) code is natively supported[^lualatex], which makes it possible to use mathematical formulae:
+
+[^lualatex]: We use [lualatex](https://lualatex.org/) for this purpose.
+
+$$
+f(x_1, \dots, x_n; \mu, \sigma^2) =
+\frac{1}{\sigma \sqrt{2\pi}} \exp{\left(- \frac{1}{2\sigma^2}\sum_{i=1}^n(x_i - \mu)^2\right)}
+$$
+
+It is also posible to cross-reference an equation, see @eq-mylabel:
+
+$$
+\begin{aligned}
+D_{x_N} & = \frac12
+\left[\begin{array}{cc}
+x_L^\top & x_N^\top \end{array}\right] \,
+\left[\begin{array}{cc}  L_L & B \\ B^\top & L_N \end{array}\right] \,
+\left[\begin{array}{c}
+x_L \\ x_N \end{array}\right] \\
+& = \frac12 (x_L^\top L_L x_L + 2 x_N^\top B^\top x_L + x_N^\top L_N x_N),
+\end{aligned}
+$$ {#eq-mylabel}
+
+### Theorems and other amsthem-like environments
+
+Quarto includes a nice support for theorems, with predefined prefix labels for theorems, lemmas, proposition, etc. see [this page](https://quarto.org/docs/authoring/cross-references.html#theorems-and-proofs). Here is a simple example:
+
+::: {#thm-slln}
+## Strong law of large numbers
+
+The sample average converges almost surely to the expected value:
+
+$$\overline{X}_n\ \xrightarrow{\text{a.s.}}\ \mu \qquad\textrm{when}\ n \to \infty.$$
+:::
+
+See @thm-slln.
+
+## R Code
+
+Quarto uses either Jupyter or knitr to render code chunks. This can be triggered in the yaml header. In this tutorial, we use `knitr` (`R` and packages `knitr`, `markdown` must be installed on your computer).
+
+``` yaml
+---
+title: "My Document"
+author "Jane Doe"
+---
+```
+
+`R` code [@R-base] chunks may be embedded as follows:
+
+```{r r-code, echo=TRUE}
+x <- rnorm(10)
+```
+
+## Figures
+
+Plots can be generated as follows:
+
+```{r pressure, message = FALSE}
+library("ggplot2")
+p <- ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  geom_smooth()
+p
+```
+
+It is also possible to create figures from static images:
+
+:::{#fig-logo}
+
+![](https://computo.sfds.asso.fr/assets/img/logo_text_vertical.png){height=200}
+
+Computo logo (label)
+:::
+
+**Note:** _Until Quarto version 1.3+ is released, including a remote image (from a web URL) in a document (like the image above) will work in the rendered HTML document but will generate an error when building the PDF document (c.f. [related bug report](https://github.com/quarto-dev/quarto-cli/issues/4443))._
+
+## Tables
+
+Tables (with label: `@tbl-mylabel` renders @tbl-mylabel) can be generated with markdown as follows
+
+| Tables   |      Are      |  Cool |
+|----------|:-------------:|------:|
+| col 1 is |  left-aligned | $1600 |
+| col 2 is |    centered   |   $12 |
+| col 3 is | right-aligned |    $1 |
+: my table caption {#tbl-mylabel}
+
+Table can also be generated by some code, for instance with knitr here:
+
+```{r cars}
+knitr::kable(summary(cars), caption = "Table caption.")
+```
+
+## Handling references {#sec-references}
+
+### Bibliographic references
+
+References are displayed as footnotes using
+[BibTeX](http://www.bibtex.org/), e.g. `[@computo]` will be displayed
+as [@computo], where `computo` is the bibtex key for this specific
+entry. The bibliographic information is automatically retrieved from
+the `.bib` file specified in the header of this document (here:
+`references.bib`).
+
+### Other cross-references
+
+As already (partially) seen, Quarto includes a mechanism similar to the
+bibliographic references for sections, equations, theorems, figures,
+lists, etc. Have a look at [this
+page](https://quarto.org/docs/authoring/cross-references.html).
+
+## Advanced formatting
+
+Advanced formatting features are possible and documented (including interactive plots, pseudo-code, (Tikz) diagrams, Lua filters, mixing R + Python in the same document), but are beyond the scope of this simple introduction. We point several entries in this direction.
+
+::: {.callout-warning}
+## More information
+
+- [The Quarto web site](https://quarto.org) for comprehensive documentation, including:
+  + [Tutorial](https://quarto.org/docs/get-started/)
+  + [User guide](https://quarto.org/docs/guide/)
+  + [Options reference](https://quarto.org/docs/reference/)
+
+- [The template distributed with the Computo Quarto extension](https://computo.sfds.asso.fr/computo-quarto-extension/), which uses such advanced features.
+
+- [Our mock version of the t-SNE paper](https://computo.sfds.asso.fr/published-paper-tsne/), a full and advanced example using Python and the Jupyter kernel.
+
+- [The previously published papers in Computo](https://computo.sfds.asso.fr/publications/) can be used as references.
+
+:::
+
+# Finalize your submission
+
+## Handle `R` dependencies with `renv`
+
+To make your work reproducible, you need to fix the packages and environment used to run your analysis. For the `R` system, the `renv` package is one of the possible reliable method, supported by the community. You basically need a couple of commands to setup your environment on your local machine. First,
+
+```{r, eval = FALSE}
+renv::init()
+```
+
+will initialize your repository. Then you just need to install the dependencies required to run your contribution, for instance, 
+
+
+```{r, eval=FALSE}
+renv::install("ggplot2") # or equivalently install.packages("ggplot2")
+```
+
+Non-CRAN packages (*e.g.* Github packages) can be used. Once you are done, you can fix everything with the command
+
+```{r, eval=FALSE}
+renv::snapshot()
+```
+
+::: {.callout-important}
+The only file that needs to be versioned by git is `renv.lock`. By default, the rest is ignored thanks to `.gitignore`. 
+:::
+
+More details for using `renv` can be found either
+
+- on the [`renv` packge webpage](https://rstudio.github.io/renv/articles/renv.html), or
+- on the [quarto page dedicated to environments](https://quarto.org/docs/projects/virtual-environments.html#using-renv)
+
+## Continuous integration
+
+The repository associated with this template is pre-configure to trigger an action on push that performs the following:
+
+1. Check out repository on the `ubuntu-latest` machine
+2. Install quarto and dependencies, including the Computo extension
+3. Install R and dependencies with `renv`, using your `renv.lock` file
+4. Render your .qmd file and Publish the results on a gh-page (both HTML and PDF)
+
+The file [.github/workflows/build.yml](https://github.com/computorg/template-computo-R/blob/main/.github/workflows/build.yml) is largely inspired from [this file](https://quarto.org/docs/publishing/github-pages.html#example-knitr-with-renv).
+
+Once this is successful, you are ready to submit your manuscript to the [Computo submission platform](https://computo.scholasticahq.com/).
+
+::: {.callout-warning}
+The first time, you possibly need to create the branch for the action to work. This can be done by running the following command from your computer, in your git repository:
+
+```.bash
+quarto publish gh-pages
+```
+
+Then, set the branch `gh-page` as the source of your github page, and trigger the action to check that everything works fine.
+:::
+
+## Data and large files
+
+If your submission materials contain files larger than 50MB, **especially data files**, they won’t fit on a git repository as is. For this reason, we encourage you to put your data or any materials you deem necessary on an external “open data” centered repository hub such a [Zenodo](https://zenodo.org/) or [OSF](https://osf.io/).
+
+# References {.unnumbered}
+
+::: {#refs}
+:::
+
+# Session information {.appendix .unnumbered}
+
+```{r session-info}
+sessionInfo()
+```
+

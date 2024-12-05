@@ -976,9 +976,6 @@ We provided a comprehensive overview of the basic usage of the `reservoirnet` pa
 
 Drawing on the robust foundation of the `ReservoirPy` structure, a well-maintained `Python` library, this package inherits its reliability and longevity. We have focused on providing access to the fundamental features, building upon the strong base provided by `ReservoirPy`. Therefore, this initial version of `reservoirnet` must evolve in tandem with the growing understanding and adoption of RC within the `R` community.
 
-# Bibliography
-
-
 <!-- # Introduction -->
 
 <!-- ## About this document -->

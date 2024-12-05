@@ -98,9 +98,9 @@ github-user: computorg
 repo: "thomasferte/reservoirnet_computo"
 draft: true # set to false once the build is running
 published: false # will be set to true once accepted
-format:
-  computo-html: default
-  computo-pdf: default
+# format:
+#   computo-html: default
+#   computo-pdf: default
 ---
 
 ```{r, setup, include=FALSE}
@@ -185,8 +185,8 @@ classification tasks. We will introduce a simple example for both task.
 ```{r schemaworkflow, echo=FALSE}
 #| label: fig-schemaworkflow
 #| fig-cap: "Worflow of `reservoirnet`."
-#| fig-height: 10
-knitr::include_graphics("images/schema_workflow.pdf")
+#| fig-height: 12
+knitr::include_graphics("images/schema_workflow.png")
 ```
 
 The workflow of `reservoirnet` is described in @fig-schemaworkflow. A reservoir model is created by the association of an input layer (a matrix), a reservoir, and an output layer. Both the reservoir and the output layer are created using the function `reservoirnet::createNode()` by specifying the node type (i.e., either `Reservoir` or `Ridge`).
@@ -886,15 +886,26 @@ ls_use_case$plot_feature_input_scaling
 #| tbl-cap: "Model performance with several reservoir configuration. For each setting, 40 reservoirs are computed and the forecast is the median of the 40 forecasts. Results show the performance metrics : MAE = Mean Absolute Error, MRE = Median Relative Error, MAEB = Mean Absolute Error to Baseline, MREB = Median Relative Error to Baseline."
 # performance of the different model
 ls_use_case$table_perf_esn %>%
-  knitr::kable(col.names = c("Model", "MAE", "MRE", "MAEB", "MREB"),
-               booktabs = TRUE,
-               linesep = c('', '\\addlinespace'), digits = 2) %>% 
-  kableExtra::kable_styling()
+  gt::gt() %>%
+  gt::tab_header(
+    title = "Model Performance"
+  ) %>%
+  gt::cols_label(
+    model = "Model",
+    mae = "MAE",
+    mre = "MRE",
+    mae_baseline = "MAEB",
+    mre_baseline = "MREB"
+  ) %>%
+  gt::fmt_number(
+    columns = c(mae, mre, mae_baseline, mre_baseline),
+    decimals = 2
+  )
 ```
 
-Table @tbl-performance shows the performance on the test set. Best model according to all metrics was RC with common input scaling and connection between input and output layers. Having one input scaling per feature did not improve the model which might be due to low generalisability of the hyperparameter of the training set to the test set due to non-stationarity. Additionaly, connecting input layer to output layer improved the model forecast. All RC models performed better than the elastic-net model.
+@tbl-performance shows the performance on the test set. Best model according to all metrics was RC with common input scaling and connection between input and output layers. Having one input scaling per feature did not improve the model which might be due to low generalisability of the hyperparameter of the training set to the test set due to non-stationarity. Additionaly, connecting input layer to output layer improved the model forecast. All RC models performed better than the elastic-net model.
 
-Figure @fig-forecastwithorwithoutUpdate shows the forecast of the different models. We note that models struggle to accurately forecast slope shifts. For instance, summer 2021 initial increase is partially predicted by all models but its decrease is not well predicted. Winter 2021 increase is anticipated by all models but they tend to overestimate it because of the rise of vaccine effect.
+@fig-forecastwithorwithoutUpdate shows the forecast of the different models. We note that models struggle to accurately forecast slope shifts. For instance, summer 2021 initial increase is partially predicted by all models but its decrease is not well predicted. Winter 2021 increase is anticipated by all models but they tend to overestimate it because of the rise of vaccine effect.
 
 ```{r forecastwithorwithoutUpdate, echo = FALSE}
 #| label: fig-forecastwithorwithoutUpdate
@@ -905,7 +916,7 @@ ls_use_case$plot_forecast
 
 ### Number of model to aggregate
 
-Figure @fig-ucAggregationSpread show the individual forecast for the 40 best sets of hyperparameters of each RC architecture. Due to the internal random connection of the reservoir, we observe forecast stochasticity and relying on only one forecast is unreliable. We explored the number of model needed at figure @fig-ucAggregationNb which shows that after 10 models, forecast is stable and even 5 models for the simpler model with common input scaling which rely on less hyperparamters.
+@fig-ucAggregationSpread show the individual forecast for the 40 best sets of hyperparameters of each RC architecture. Due to the internal random connection of the reservoir, we observe forecast stochasticity and relying on only one forecast is unreliable. We explored the number of model needed at @fig-ucAggregationNb which shows that after 10 models, forecast is stable and even 5 models for the simpler model with common input scaling which rely on less hyperparamters.
 
 ```{r ucAggregationSpread, echo = FALSE}
 #| label: fig-ucAggregationSpread
@@ -925,7 +936,7 @@ ls_use_case$plot_aggregation
 
 We compared the coefficients of the output layer estimated for the input layer and the reservoir nodes. Additionally, we compared the coefficient given to the input layer by the output layer in the reservoir and the coefficient estimated by the elastic-net model.
 
-Figure @fig-importanceReservoir illustrates the ranking of input layer compared to all connections to the output layer, including the 500 reservoir nodes and the 16 features of the input layer (excluding bias). The figure shows that the model with common input scaling tends to assign less weight to input layer compared to the model with multiple input scaling. This suggests that the reservoir with common input scaling provides more information than the reservoir with multiple input scaling, which aligns with its better performance, as shown in Table @tbl-performance.
+@fig-importanceReservoir illustrates the ranking of input layer compared to all connections to the output layer, including the 500 reservoir nodes and the 16 features of the input layer (excluding bias). The figure shows that the model with common input scaling tends to assign less weight to input layer compared to the model with multiple input scaling. This suggests that the reservoir with common input scaling provides more information than the reservoir with multiple input scaling, which aligns with its better performance, as shown in Table @tbl-performance.
 
 ```{r importanceReservoir, echo = FALSE}
 #| label: fig-importanceReservoir
@@ -934,7 +945,7 @@ Figure @fig-importanceReservoir illustrates the ranking of input layer compared 
 ls_use_case$plot_reservoir_importance
 ```
 
-Furthermore, figure @fig-importanceReservoirvsEnet compares the coefficients assigned to input features by the elastic-net model and the RC models. While the coefficients are generally consistent across RC models, there are some notable differences with elastic-net. Specifically, certain features deemed important by the elastic-net model, such as the derivative of RT-PCR, and the derivative of Vaccine, are less important for the reservoir computing model. This may indicate that these features predictive ability is better conveyed by their relationship with other features, which is captured by the reservoir computing model but might not be by the elastic-net model. Conversely, emergency, IPTCC, proportion of positive RT-PCR, and hospitalizations are more important for the reservoir computing model than for the elastic-net model.
+Furthermore, @fig-importanceReservoirvsEnet compares the coefficients assigned to input features by the elastic-net model and the RC models. While the coefficients are generally consistent across RC models, there are some notable differences with elastic-net. Specifically, certain features deemed important by the elastic-net model, such as the derivative of RT-PCR, and the derivative of Vaccine, are less important for the reservoir computing model. This may indicate that these features predictive ability is better conveyed by their relationship with other features, which is captured by the reservoir computing model but might not be by the elastic-net model. Conversely, emergency, IPTCC, proportion of positive RT-PCR, and hospitalizations are more important for the reservoir computing model than for the elastic-net model.
 
 ```{r importanceReservoirvsEnet, echo = FALSE}
 #| label: fig-importanceReservoirvsEnet

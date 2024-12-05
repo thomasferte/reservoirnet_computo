@@ -3,6 +3,7 @@
 .Rapp.history
 .RData
 .Ruserdata
+*.pptx
 /*.Rcheck/
 .Rproj.user/
 *_cache/

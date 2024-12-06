@@ -128,6 +128,8 @@ RC is a machine learning paradigm which is most often implemented as Echo State 
 ```{r rcpresentation, echo=FALSE}
 #| label: fig-rcpresentation
 #| fig-cap: "Reservoir computing is composed of an input layer, a reservoir and an output layer. Connection between input layer and reservoir and inside reservoir are random. Only the output layer is optimized based on a ridge regression. Adapted from @trouvain_reservoirpy_2020"
+#| out.width: "100%"
+#| out.height: "12cm"
 knitr::include_graphics("images/image1.png")
 ```
 
@@ -877,7 +879,7 @@ Figure @fig-ucHyperparamMultipleIS shows the hyperparameter search for RC with m
 ```{r ucHyperparamMultipleIS, echo=FALSE}
 #| label: fig-ucHyperparamMultipleIS
 #| fig-cap: "Hyperparameter evaluation on training set by random search of the model with multiple input scaling and no connection between input layer and output layer. Hp sets with MAE above 30 were removed for clarity of visualisation."
-#| fig-height: 6
+#| fig-height: 9
 # hyperparameter search, focus on input scaling
 ls_use_case$plot_feature_input_scaling
 ```
@@ -1244,9 +1246,9 @@ Drawing on the robust foundation of the `ReservoirPy` structure, a well-maintain
 ::: {#refs}
 :::
 
-# Session information {.appendix .unnumbered}
+<!-- # Session information {.appendix .unnumbered} -->
 
-```{r session-info}
-sessionInfo()
-```
+<!-- ```{r session-info} -->
+<!-- sessionInfo() -->
+<!-- ``` -->
 

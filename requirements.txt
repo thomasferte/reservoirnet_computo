@@ -1,0 +1,12 @@
+dill==0.3.6
+joblib==1.2.0
+numpy==1.22.4
+pkg_resources==0.0.0
+py==1.11.0
+pytest==2.9.2
+reservoirpy==0.3.6
+rpython==0.2.1
+scikit-learn==1.2.2
+scipy==1.7.3
+threadpoolctl==3.1.0
+tqdm==4.65.0

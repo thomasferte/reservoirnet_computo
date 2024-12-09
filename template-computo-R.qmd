@@ -108,6 +108,13 @@ options(prompt = 'R> ', continue = '+ ')
 set.seed(1)
 ```
 
+```{r results='hide'}
+# check reservoirpy version is ok, if not, install it
+python_packages <- reticulate::py_list_packages()
+bool <- python_packages$version[python_packages$package == "reservoirpy"] == "0.3.12"
+if(!isTRUE(bool)) reticulate::py_install("reservoirpy==0.3.12")
+```
+
 # Introduction
 
 Reservoir Computing (RC) is a prominent machine learning method, proposed by @jaeger__2001, @maass_real-time_2002 and @lukosevicius_reservoir_2009
@@ -418,7 +425,7 @@ lsdf <- lapply(list(yTrain = yTrain,
 
 We then feed the reservoir with the train set. To do so, we set a `warmup` of `30` days during which the data are propagating into the reservoir but not used to fit the output layer.
 
-```{r}
+```{r results='hide'}
 ### train the reservoir ridge output
 fit <- reservoirnet::reservoirR_fit(node = model,
                                     X = lsdf$xTrain,
@@ -464,9 +471,7 @@ dfOutcome %>%
 
 We observe that the model forecast at @fig-forecast is not fully accurate, both on the test set and the train set. In that case, one option could be to reduce ridge penalization to fit more closely the data, the optimization of ridge hyperparameter will be discussed at  @sec-studycase. Another possibility is to ease the learning of the algorithm by forecasting the variation of the hospitalization instead of the number of hospitalized patients. For that step, we will learn on the `outcome_deriv` contained in `yTrain_variation` data which is defined outcome as `outcome_deriv = outcome - hosp`. As depicted at @fig-figForecastDerivvsRaw, this strategy improved the model forecast.
 
-```{r figForecastDerivvsRaw}
-#| label: fig-figForecastDerivvsRaw
-#| fig-cap: "Covid-19 hospitalizations forecast. The model is either trained to forecast the number of hospitalizations (denoted Raw) or the variation of the hospitalizations compared to current level of hospitalisation (denoted Variation)"
+```{r results="hide"}
 ## Fit reservoir on outcome variation instead of raw outcome
 fit2 <- reservoirnet::reservoirR_fit(node = model,
                                      X = lsdf$xTrain,
@@ -479,6 +484,12 @@ vec_pred2_variation <- reservoirnet::predict_seq(node = fit2$fit,
                                                  reset = TRUE)
 ## Transform the outcome variation forecast into hospitalization forecast
 vec_pred2 <- vec_pred2_variation + xTest$hosp
+```
+
+
+```{r figForecastDerivvsRaw}
+#| label: fig-figForecastDerivvsRaw
+#| fig-cap: "Covid-19 hospitalizations forecast. The model is either trained to forecast the number of hospitalizations (denoted Raw) or the variation of the hospitalizations compared to current level of hospitalisation (denoted Variation)"
 ## Plot the results
 dfOutcome %>%
   mutate(Raw = vec_pred,
@@ -598,7 +609,7 @@ for (x in X_train) {
 
 Then we can train the readout based on this last state vector. In that case, `Y_train` contains a single label for each utterance.
 
-```{r}
+```{r results='hide'}
 # Fit the reservoir using the last state vector (each observation is the whole vowel sequence)
 res <- reservoirnet::reservoirR_fit(readout,X = states_train, Y = Y_train)
 ```
@@ -705,7 +716,7 @@ model <- list(source %>>% reservoir, source) %>>% readout
 
 We can then fit the model and predict the labels for the test data. The `reset` parameter is set to `TRUE` to remove information from the reservoir from the training process.
 
-```{r}
+```{r results='hide'}
 # Fit the RC model
 model_fit <- reservoirnet::reservoirR_fit(node = model,
                                           X = X_train,

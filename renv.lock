@@ -9,9 +9,9 @@
     ]
   },
   "Python": {
-    "Version": "3.8.10",
+    "Version": "3.10.16",
     "Type": "virtualenv",
-    "Name": "/home/tf1/.virtualenvs/r-reticulate"
+    "Name": "./renv/python/virtualenvs/renv-python-3.10"
   },
   "Packages": {
     "Deriv": {

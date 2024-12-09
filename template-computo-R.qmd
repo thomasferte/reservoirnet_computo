@@ -128,7 +128,7 @@ RC is a machine learning paradigm which is most often implemented as Echo State 
 ```{r rcpresentation, echo=FALSE}
 #| label: fig-rcpresentation
 #| fig-cap: "Reservoir computing is composed of an input layer, a reservoir and an output layer. Connection between input layer and reservoir and inside reservoir are random. Only the output layer is optimized based on a ridge regression. Adapted from @trouvain_reservoirpy_2020"
-#| out.height: "12cm"
+#| out.width: "100%"
 knitr::include_graphics("images/image1.png")
 ```
 
@@ -186,7 +186,7 @@ classification tasks. We will introduce a simple example for both task.
 ```{r schemaworkflow, echo=FALSE}
 #| label: fig-schemaworkflow
 #| fig-cap: "Worflow of `reservoirnet`."
-#| out.height: "18cm"
+#| out.width: "75%"
 knitr::include_graphics("images/schema_workflow.png")
 ```
 

@@ -92,6 +92,7 @@ format:
   computo-html: default
   computo-pdf: 
     echo: true
+    tidy: styler
 ---
 
 ```{r, setup, include=FALSE}
@@ -213,24 +214,31 @@ Due to the substantial fluctuations observed in both RT-PCR metrics, our initial
 dfOutcome <- dfCovid %>%
   # outcome at 14 days
   mutate(outcome = lead(x = hosp, n = dist_forecast),
-         # Create a new column 'outcome' which contains the number of hospitalizations ('hosp')
-         # shifted forward by 'dist_forecast' days (14 days). This represents the outcome we want to predict.
+         # Create a new column 'outcome' which contains the number of
+         # hospitalizations ('hosp') shifted forward by 'dist_forecast' days
+         # (14 days). This represents the outcome we want to predict.
 
          outcomeDate = date + dist_forecast,
-         # Create a new column 'outcomeDate' which is the current date plus the forecast period (14 days).
+         # Create a new column 'outcomeDate' which is the current date plus the
+         # forecast period (14 days).
          
          outcome_deriv = outcome - hosp) %>%
-         # Create a new column 'outcome_deriv' which is the difference between the predicted outcome and current hospitalizations.
-         # This represents the change in hospitalizations over the forecast period.
+         # Create a new column 'outcome_deriv' which is the difference between
+         # the predicted outcome and current hospitalizations.
+         # This represents the change in hospitalizations over the forecast
+         # period.
 
   # rolling average for tested and positive_pcr
   mutate_at(.vars = c("Positive", "Tested"),
             .funs = function(x) slider::slide_dbl(.x = x,
                                                   .before = 6,
                                                   .f = mean))
-            # Apply a rolling mean (7-day average) to the 'Positive' and 'Tested' columns.
-            # The 'slider::slide_dbl' function is used to calculate the mean over a window of 7 days (current day + 6 days before).
-            # This smooths out daily fluctuations and provides a better trend indicator.
+            # Apply a rolling mean (7-day average) to the 'Positive' and
+            # 'Tested' columns.
+            # The 'slider::slide_dbl' function is used to calculate the mean
+            # over a window of 7 days (current day + 6 days before). This
+            # smooths out daily fluctuations and provides a better trend
+            # indicator.
 
 ```
 
@@ -263,14 +271,19 @@ In addition, we can set the seed (`seed`). Because the reservoir connections are
 For this part of the tutorial, we will set the hyperparameter at a given value. Hyperparameter optimization will be detailed at @sec-studycase.
 
 ```{r}
-# Create a reservoir computing node using the 'createNode' function from the reservoirnet package.
+# Create a reservoir computing node using the 'createNode' function from the
+# reservoirnet package.
 # Arguments:
 # - nodeType = "Reservoir": Specify the type of node to be a reservoir.
-# - seed = 1: Set the seed for reproducibility, ensuring consistent results when the model is run multiple times.
+# - seed = 1: Set the seed for reproducibility, ensuring consistent results
+#             when the model is run multiple times.
 # - units = 500: Set the number of reservoir units (neurons) to 500.
-# - lr = 0.7: Set the leakage rate (lr) of the reservoir, which controls how quickly the reservoir state decays over time.
-# - sr = 1: Set the spectral radius (sr) of the reservoir, which influences the stability and memory capacity of the reservoir.
-# - input_scaling = 1: Set the input scaling factor, which scales the input signal before it is fed into the reservoir.
+# - lr = 0.7: Set the leakage rate (lr) of the reservoir, which controls how
+#             quickly the reservoir state decays over time.
+# - sr = 1: Set the spectral radius (sr) of the reservoir, which influences the
+#           stability and memory capacity of the reservoir.
+# - input_scaling = 1: Set the input scaling factor, which scales the input
+#                       signal before it is fed into the reservoir.
 
 reservoir <- reservoirnet::createNode(nodeType = "Reservoir",
                                       seed = 1,
@@ -293,12 +306,15 @@ X <- dfOutcome %>%
 Then we run the `predict_seq()` function. It takes as input a node (i.e a reservoir or a reservoir associated with an output layer) and the feature matrix.
 
 ```{r}
-# Generate the state of the reservoir using the 'predict_seq' function from the reservoirnet package.
+# Generate the state of the reservoir using the 'predict_seq' function from the
+# reservoirnet package.
 # Arguments:
 # - node = reservoir: The reservoir computing node created earlier.
-# - X = X: The input data matrix containing the features 'hosp', 'Positive', and 'Tested'.
-# The function computes the state of the reservoir for each time step in the input sequence,
-# effectively transforming the input data into the reservoir's high-dimensional state space.
+# - X = X: The input data matrix containing the features 'hosp', 'Positive',
+#           and 'Tested'.
+# The function computes the state of the reservoir for each time step in the
+# input sequence, effectively transforming the input data into the reservoir's
+# high-dimensional state space.
 
 reservoir_state <- predict_seq(node = reservoir, X = X)
 ```
@@ -352,16 +368,21 @@ Initially, we establish the output layer with the `createNode()` function, incor
 ```{r}
 readout <- reservoirnet::createNode(nodeType = "Ridge",
                                     ridge = 1e3)
-# Create a readout node using ridge regression with the 'createNode' function from the reservoirnet package.
+# Create a readout node using ridge regression with the 'createNode' function
+# from the reservoirnet package.
 # Arguments:
-# - nodeType = "Ridge": Specify the type of node to be a ridge regression readout.
-# - ridge = 1e3: Set the regularization parameter (ridge) for the ridge regression to 1000.
-# Ridge regression is used to prevent overfitting by adding a penalty on the size of the coefficients.
+# - nodeType = "Ridge": Specify the type of node to be a ridge regression
+#                       readout.
+# - ridge = 1e3: Set the regularization parameter (ridge) for the ridge
+#                 regression to 1000.
+# Ridge regression is used to prevent overfitting by adding a penalty on the
+# size of the coefficients.
 
 model <- reservoirnet::link(reservoir, readout)
-# Link the reservoir and readout nodes to form a complete reservoir computing model.
-# The 'link' function connects the high-dimensional state generated by the reservoir to the readout layer,
-# allowing the model to learn the mapping from the reservoir states to the target outputs.
+# Link the reservoir and readout nodes to form a complete reservoir computing
+# model. The 'link' function connects the high-dimensional state generated by
+# the reservoir to the readout layer, allowing the model to learn the mapping
+# from the reservoir states to the target outputs.
 ```
 
 #### Set the data
@@ -388,7 +409,7 @@ xTeststand <- xTest
 # standardise based on training set values
 ls_fct_stand <- apply(xTrain,
                       MARGIN = 2,
-                      FUN = function(x) function(feature) return(feature/(max(x))))
+                      FUN = function(x) function(feature) feature/(max(x)))
 lapply(X = names(ls_fct_stand),
        FUN = function(x){
          xTrainstand[,x] <<- ls_fct_stand[[x]](feature = xTrain[,x])
@@ -444,8 +465,10 @@ dfOutcome %>%
            ymin = 0,
            ymax = max(dfOutcome$outcome, na.rm = T)*1.1, 
            alpha = .2) +
-  annotate("text", label = "Test set", x = as.Date("2022-08-01"), y = 2200, size = 7) +
-  annotate("text", label = "Train set", x = as.Date("2021-03-01"), y = 2200, size = 7) +
+  annotate("text", label = "Test set",
+           x = as.Date("2022-08-01"), y = 2200, size = 7) +
+  annotate("text", label = "Train set",
+           x = as.Date("2021-03-01"), y = 2200, size = 7) +
   scale_color_manual(values = c("#3772ff", "#080708")) +
   theme_minimal() +
   labs(color = "", x = "Date", y = "Hospitalizations")
@@ -491,8 +514,10 @@ dfOutcome %>%
            ymin = 0,
            ymax = max(dfOutcome$outcome, na.rm = T)*1.1, 
            alpha = .2) +
-  annotate("text", label = "Test set", x = as.Date("2022-08-01"), y = 2200, size = 5) +
-  annotate("text", label = "Train set", x = as.Date("2021-03-01"), y = 2200, size = 5) +
+  annotate("text", label = "Test set",
+           x = as.Date("2022-08-01"), y = 2200, size = 5) +
+  annotate("text", label = "Train set",
+           x = as.Date("2021-03-01"), y = 2200, size = 5) +
   facet_wrap(Outcome_type ~ .,
              labeller = label_bquote(cols = "Outcome" : .(Outcome_type))) +
   scale_color_manual(values = c("#3772ff", "#080708")) +
@@ -508,7 +533,8 @@ dfOutcome %>%
 This example is largely inspired from the [classification tutorial of reservoirpy](https://github.com/reservoirpy/reservoirpy/blob/master/tutorials/5-Classification-with-RC.ipynb). To illustrate the classification task, we will use the Japanese vowel dataset (@kudo_multidimensional_1999). The data can be loaded from `reservoirnet` as follow :
 
 ```{r}
-# Get the Japanese vowels dataset using the 'generate_data' function from the reservoirnet package.
+# Get the Japanese vowels dataset using the 'generate_data' function from the
+# reservoirnet package.
 # The dataset contains preprocessed features and labels for classification.
 # Then we isolate train and test sets
 japanese_vowels <- reservoirnet::generate_data(dataset = "japanese_vowels")[[1]]
@@ -560,17 +586,24 @@ The first approach is the sequence-to-vector encoding. For this task we aim to p
 reservoir <- reservoirnet::createNode("Reservoir", units = 500,
                                       lr=0.1, sr=0.9,
                                       seed = 1)
-# Create a reservoir computing node with 500 units using the 'createNode' function from the reservoirnet package.
+# Create a reservoir computing node with 500 units using the 'createNode'
+# function from the reservoirnet package.
 # Arguments:
 # - units = 500: Set the number of reservoir units (neurons) to 500.
-# - lr = 0.1: Set the leakage rate (lr) of the reservoir to 0.1, controlling how quickly the reservoir state decays over time.
-# - sr = 0.9: Set the spectral radius (sr) of the reservoir to 0.9, influencing the stability and memory capacity of the reservoir.
-# - seed = 1: Set the seed for reproducibility, ensuring consistent results when the model is run multiple times.
+# - lr = 0.1: Set the leakage rate (lr) of the reservoir to 0.1, controlling
+#             how quickly the reservoir state decays over time.
+# - sr = 0.9: Set the spectral radius (sr) of the reservoir to 0.9, influencing
+#             the stability and memory capacity of the reservoir.
+# - seed = 1: Set the seed for reproducibility, ensuring consistent results
+#             when the model is run multiple times.
 readout <- reservoirnet::createNode("Ridge",ridge=1e-6)
-# Create a readout node using ridge regression with the 'createNode' function from the reservoirnet package.
+# Create a readout node using ridge regression with the 'createNode' function
+# from the reservoirnet package.
 # Arguments:
-# - ridge = 1e-6: Set the regularization parameter (ridge) for the ridge regression to 1e-6.
-# Ridge regression is used to prevent overfitting by adding a penalty on the size of the coefficients.
+# - ridge = 1e-6: Set the regularization parameter (ridge) for the ridge
+#                 regression to 1e-6.
+# Ridge regression is used to prevent overfitting by adding a penalty on the
+# size of the coefficients.
 ```
 
 To perform this task, we need to modify the training and testing processes. Leveraging the inherent inertia of the reservoir, information from preceding time steps is preserved, effectively endowing the RC with a form of memory. Consequently, the final state vector encapsulates insights gathered from all antecedent states. In the context of the sequence-to-vector encoding task, only this ultimate state is employed. This process is executed as follows:
@@ -582,9 +615,11 @@ for (x in X_train) {
   # Loop over each training sample in X_train.
   states <- reservoirnet::predict_seq(node = reservoir, X = x,
                                       reset=TRUE)
-  # Generate the reservoir states for the current training sample using the 'predict_seq' function.
+  # Generate the reservoir states for the current training sample using the
+  # 'predict_seq' function.
   states_train[[k]] <- t(as.matrix(states[nrow(states),]))
-  # Extract the final reservoir state for the current sample and store it in 'states_train'.
+  # Extract the final reservoir state for the current sample and store it in
+  # 'states_train'.
   k <- k+1
 }
 ```
@@ -592,7 +627,8 @@ for (x in X_train) {
 Then we can train the readout based on this last state vector. In that case, `Y_train` contains a single label for each utterance.
 
 ```{r results='hide'}
-# Fit the reservoir using the last state vector (each observation is the whole vowel sequence)
+# Fit the reservoir using the last state vector (each observation is the whole
+# vowel sequence)
 res <- reservoirnet::reservoirR_fit(readout,X = states_train, Y = Y_train)
 ```
 
@@ -692,7 +728,8 @@ Then we can train a simple Echo State Network to solve this task. For this examp
 source <- createNode("Input")
 readout <- createNode("Ridge",ridge=1e-6)
 reservoir <- createNode("Reservoir",units = 500,lr=0.1, sr=0.9, seed = 1)
-# Connect the input layer to the reservoir and connect both the input layer and the reservoir to the output layer
+# Connect the input layer to the reservoir and connect both the input layer and
+# the reservoir to the output layer
 model <- list(source %>>% reservoir, source) %>>% readout
 ```
 

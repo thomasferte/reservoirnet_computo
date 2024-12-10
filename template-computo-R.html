@@ -15,7 +15,7 @@
 <meta name="author" content="Rodolphe Thiébaut">
 <meta name="author" content="Xavier Hinaut">
 <meta name="author" content="Boris Hejblum">
-<meta name="dcterms.date" content="2024-12-09">
+<meta name="dcterms.date" content="2024-12-10">
 <meta name="keywords" content="Reservoir Computing, Covid-19, Electronic Health Records, Time series">
 
 <title>Reservoir Computing in R: a Tutorial for Using reservoirnet to Predict Complex Time-Series</title>
@@ -292,14 +292,14 @@ ISSN 2824-7795</p>
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">December 9, 2024</p>
+        <p class="date">December 10, 2024</p>
       </div>
     </div>
                                     
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">December 9, 2024</p>
+        <p class="date-modified">December 10, 2024</p>
       </div>
     </div>
       
@@ -548,7 +548,7 @@ Figure&nbsp;3: Hospitalizations, number of positive RT-PCR and number ofx RT-PCR
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">input_scaling =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Then we can feed the data to the reservoir and see the activation state of the reservoir <span class="math inline">x(t)</span>. To do so, we first prepare the data and transform it to a matrix:</p>
+<p>Then we can feed the data to the reservoir and see the activation state of the reservoir <span class="math inline">x(t)</span>. To do so, we first prepare the data and transform it to a matrix.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Hide/Show the code</summary>
@@ -639,7 +639,7 @@ Figure&nbsp;5: 20 random node activation over time. Scaled features.
 <p>In order to train the reservoir, we should train the last layer which linearly combines the neuron’s output.</p>
 <section id="set-the-esn" class="level4" data-number="3.3.3.1">
 <h4 data-number="3.3.3.1" class="anchored" data-anchor-id="set-the-esn"><span class="header-section-number">3.3.3.1</span> Set the ESN</h4>
-<p>Initially, we establish the output layer, incorporating a ridge penalty set at <code>1e3</code>. It’s important to note that this hyperparameter can be subject to optimization, a topic that will be explored in <a href="#sec-studycase" class="quarto-xref">Section&nbsp;4</a>. This parameter plays a pivotal role in fine-tuning the model’s conformity to the data. When set excessively high, the risk of underfitting arises, whereas setting it too low can lead to overfitting. We connect the output layer to the reservoir making the model ready to be trained.</p>
+<p>Initially, we establish the output layer with the <code>createNode()</code> function, incorporating a ridge penalty set at <code>1e3</code>. It’s important to note that this hyperparameter can be subject to optimization, a topic that will be explored in <a href="#sec-studycase" class="quarto-xref">Section&nbsp;4</a>. This parameter plays a pivotal role in fine-tuning the model’s conformity to the data. When set excessively high, the risk of underfitting arises, whereas setting it too low can lead to overfitting. We connect the output layer to the reservoir, with the <code>link()</code> function, making the model ready to be trained.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Hide/Show the code</summary>
@@ -702,7 +702,7 @@ Figure&nbsp;5: 20 random node activation over time. Scaled features.
 </section>
 <section id="train-the-model-and-predict" class="level4" data-number="3.3.3.3">
 <h4 data-number="3.3.3.3" class="anchored" data-anchor-id="train-the-model-and-predict"><span class="header-section-number">3.3.3.3</span> Train the model and predict</h4>
-<p>We then feed the reservoir with the train set. To do so, we set a <code>warmup</code> of <code>30</code> days during which the data are propagating into the reservoir but not used to fit the output layer.</p>
+<p>We then feed the reservoir with the train set using the <code>reservoirR_fit()</code> function. To do so, we set a <code>warmup</code> of <code>30</code> days during which the data are propagating into the reservoir but not used to fit the output layer.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Hide/Show the code</summary>
@@ -714,7 +714,7 @@ Figure&nbsp;5: 20 random node activation over time. Scaled features.
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">reset =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Now that the ridge layer is trained, we can forecast. We set the parameter <code>reset</code> to <code>TRUE</code> in order to clean the reservoir from the data used by the training set.</p>
+<p>Now that the ridge layer is trained, we can forecast using the <code>predict_seq()</code> function. We set the parameter <code>reset</code> to <code>TRUE</code> in order to clean the reservoir from the data used by the training set.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Hide/Show the code</summary>
@@ -864,7 +864,7 @@ Figure&nbsp;8: Vowel dataset, sample with 3 speakers and 2 utterance each.
 </section>
 <section id="classification-sequence-to-vector-model" class="level3" data-number="3.4.2">
 <h3 data-number="3.4.2" class="anchored" data-anchor-id="classification-sequence-to-vector-model"><span class="header-section-number">3.4.2</span> Classification (sequence-to-vector model)</h3>
-<p>The first approach is the sequence-to-vector encoding. For this task we aim to predict the speaker of the whole utterance (i.e the label is assigned to the whole sequence). We first start by creating the reservoir and the output layer.</p>
+<p>The first approach is the sequence-to-vector encoding. For this task we aim to predict the speaker of the whole utterance (i.e the label is assigned to the whole sequence). We first start by creating the reservoir and the output layer using <code>createNode()</code> function.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Hide/Show the code</summary>
@@ -2215,7 +2215,7 @@ loaded via a namespace (and not attached):
   title = {Reservoir {Computing} in {R:} A {Tutorial} for {Using}
     Reservoirnet to {Predict} {Complex} {Time-Series}},
   journal = {Computo},
-  date = {2024-12-09},
+  date = {2024-12-10},
   url = {https://computo.sfds.asso.fr/template-computo-quarto},
   doi = {xxxx},
   issn = {2824-7795},
@@ -3003,7 +3003,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb34-283"><a href="#cb34-283" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">input_scaling =</span> <span class="dv">1</span>)</span>
 <span id="cb34-284"><a href="#cb34-284" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-285"><a href="#cb34-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-286"><a href="#cb34-286" aria-hidden="true" tabindex="-1"></a>Then we can feed the data to the reservoir and see the activation state of the reservoir $x(t)$. To do so, we first prepare the data and transform it to a matrix:</span>
+<span id="cb34-286"><a href="#cb34-286" aria-hidden="true" tabindex="-1"></a>Then we can feed the data to the reservoir and see the activation state of the reservoir $x(t)$. To do so, we first prepare the data and transform it to a matrix.</span>
 <span id="cb34-287"><a href="#cb34-287" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-290"><a href="#cb34-290" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb34-291"><a href="#cb34-291" aria-hidden="true" tabindex="-1"></a><span class="do">## select explanatory features of the train set and transform it to an array</span></span>
@@ -3070,7 +3070,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb34-356"><a href="#cb34-356" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-357"><a href="#cb34-357" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Set the ESN</span></span>
 <span id="cb34-358"><a href="#cb34-358" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-359"><a href="#cb34-359" aria-hidden="true" tabindex="-1"></a>Initially, we establish the output layer, incorporating a ridge penalty set at <span class="in">`1e3`</span>. It's important to note that this hyperparameter can be subject to optimization, a topic that will be explored in @sec-studycase. This parameter plays a pivotal role in fine-tuning the model's conformity to the data. When set excessively high, the risk of underfitting arises, whereas setting it too low can lead to overfitting. We connect the output layer to the reservoir making the model ready to be trained.</span>
+<span id="cb34-359"><a href="#cb34-359" aria-hidden="true" tabindex="-1"></a>Initially, we establish the output layer with the <span class="in">`createNode()`</span> function, incorporating a ridge penalty set at <span class="in">`1e3`</span>. It's important to note that this hyperparameter can be subject to optimization, a topic that will be explored in @sec-studycase. This parameter plays a pivotal role in fine-tuning the model's conformity to the data. When set excessively high, the risk of underfitting arises, whereas setting it too low can lead to overfitting. We connect the output layer to the reservoir, with the <span class="in">`link()`</span> function, making the model ready to be trained.</span>
 <span id="cb34-360"><a href="#cb34-360" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-363"><a href="#cb34-363" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb34-364"><a href="#cb34-364" aria-hidden="true" tabindex="-1"></a>readout <span class="ot">&lt;-</span> reservoirnet<span class="sc">::</span><span class="fu">createNode</span>(<span class="at">nodeType =</span> <span class="st">"Ridge"</span>,</span>
@@ -3128,7 +3128,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb34-418"><a href="#cb34-418" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-419"><a href="#cb34-419" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Train the model and predict</span></span>
 <span id="cb34-420"><a href="#cb34-420" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-421"><a href="#cb34-421" aria-hidden="true" tabindex="-1"></a>We then feed the reservoir with the train set. To do so, we set a <span class="in">`warmup`</span> of <span class="in">`30`</span> days during which the data are propagating into the reservoir but not used to fit the output layer.</span>
+<span id="cb34-421"><a href="#cb34-421" aria-hidden="true" tabindex="-1"></a>We then feed the reservoir with the train set using the <span class="in">`reservoirR_fit()`</span> function. To do so, we set a <span class="in">`warmup`</span> of <span class="in">`30`</span> days during which the data are propagating into the reservoir but not used to fit the output layer.</span>
 <span id="cb34-422"><a href="#cb34-422" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-423"><a href="#cb34-423" aria-hidden="true" tabindex="-1"></a><span class="in">```{r results='hide'}</span></span>
 <span id="cb34-424"><a href="#cb34-424" aria-hidden="true" tabindex="-1"></a><span class="in">### train the reservoir ridge output</span></span>
@@ -3139,7 +3139,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb34-429"><a href="#cb34-429" aria-hidden="true" tabindex="-1"></a><span class="in">                                    reset = TRUE)</span></span>
 <span id="cb34-430"><a href="#cb34-430" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-431"><a href="#cb34-431" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-432"><a href="#cb34-432" aria-hidden="true" tabindex="-1"></a>Now that the ridge layer is trained, we can forecast. We set the parameter <span class="in">`reset`</span> to <span class="in">`TRUE`</span> in order to clean the reservoir from the data used by the training set.</span>
+<span id="cb34-432"><a href="#cb34-432" aria-hidden="true" tabindex="-1"></a>Now that the ridge layer is trained, we can forecast using the <span class="in">`predict_seq()`</span> function. We set the parameter <span class="in">`reset`</span> to <span class="in">`TRUE`</span> in order to clean the reservoir from the data used by the training set.</span>
 <span id="cb34-433"><a href="#cb34-433" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-436"><a href="#cb34-436" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb34-437"><a href="#cb34-437" aria-hidden="true" tabindex="-1"></a><span class="co"># Forecast with the trained reservoir on the test data</span></span>
@@ -3277,7 +3277,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb34-573"><a href="#cb34-573" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-574"><a href="#cb34-574" aria-hidden="true" tabindex="-1"></a><span class="fu">### Classification (sequence-to-vector model)</span></span>
 <span id="cb34-575"><a href="#cb34-575" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-576"><a href="#cb34-576" aria-hidden="true" tabindex="-1"></a>The first approach is the sequence-to-vector encoding. For this task we aim to predict the speaker of the whole utterance (i.e the label is assigned to the whole sequence). We first start by creating the reservoir and the output layer.</span>
+<span id="cb34-576"><a href="#cb34-576" aria-hidden="true" tabindex="-1"></a>The first approach is the sequence-to-vector encoding. For this task we aim to predict the speaker of the whole utterance (i.e the label is assigned to the whole sequence). We first start by creating the reservoir and the output layer using <span class="in">`createNode()`</span> function.</span>
 <span id="cb34-577"><a href="#cb34-577" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-580"><a href="#cb34-580" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb34-581"><a href="#cb34-581" aria-hidden="true" tabindex="-1"></a>reservoir <span class="ot">&lt;-</span> reservoirnet<span class="sc">::</span><span class="fu">createNode</span>(<span class="st">"Reservoir"</span>, <span class="at">units =</span> <span class="dv">500</span>,</span>

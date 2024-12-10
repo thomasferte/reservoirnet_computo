@@ -1175,7 +1175,7 @@ Figure&nbsp;10: Prediction in a sequence-to-sequence approach 6 samples with 3 s
 </section>
 <section id="results" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="results"><span class="header-section-number">4.3</span> Results</h2>
-<p>The goal of this task is to predict 14 days ahead the hospitalization. Figure <a href="#fig-ucPresentData" class="quarto-xref">Figure&nbsp;11</a> shows both the training set (i.e before 2021-03-01) and the test set where the blue curve correspond to the input features (first derivatives are not shown) and the orange curves correspond to the outcome the model is trained on (i.e the hospitalization variation) and the hospitalizations at 14 days on which the performance metrics are computed. The figures outline that the relation between the input features and the outcome evolve over time and that the time series is not stationary. For instance IPTCC (<em>Index PREDICT de Transmissivité Climatique de la COVID-19</em>) seems correlated to the outcome except that it completely miss the summer 2021 increase.</p>
+<p>The goal of this task is to predict 14 days ahead the hospitalization. <a href="#fig-ucPresentData" class="quarto-xref">Figure&nbsp;11</a> shows both the training set (i.e before 2021-03-01) and the test set where the blue curve correspond to the input features (first derivatives are not shown) and the orange curves correspond to the outcome the model is trained on (i.e the hospitalization variation) and the hospitalizations at 14 days on which the performance metrics are computed. The figures outline that the relation between the input features and the outcome evolve over time and that the time series is not stationary. For instance IPTCC (<em>Index PREDICT de Transmissivité Climatique de la COVID-19</em>) seems correlated to the outcome except that it completely miss the summer 2021 increase.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-ucPresentData" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1192,7 +1192,7 @@ Figure&nbsp;11: Covid-19 epidemic at BUH. Outcome of interest is presented in or
 </div>
 <section id="hyperparameter-selection" class="level3" data-number="4.3.1">
 <h3 data-number="4.3.1" class="anchored" data-anchor-id="hyperparameter-selection"><span class="header-section-number">4.3.1</span> Hyperparameter selection</h3>
-<p>Figure <a href="#fig-ucHyperparam" class="quarto-xref">Figure&nbsp;12</a> shows the hyperparameter optimisation using random search for the different RC architectures. We observe that model with multiple input scaling achieved better performance on the train set compared to model with single input scaling which is expected as they can adapt more closely to the data thanks to specific input scaling for each feature.</p>
+<p><a href="#fig-ucHyperparam" class="quarto-xref">Figure&nbsp;12</a> shows the hyperparameter optimisation using random search for the different RC architectures. We observe that model with multiple input scaling achieved better performance on the train set compared to model with single input scaling which is expected as they can adapt more closely to the data thanks to specific input scaling for each feature.</p>
 <p>As expected, we observe that the optimal leaking rate is above 1e-2 for all RC which is coherent with the short term dynamic of covid-19 epidemic. Trend for other hyperparameter are less clear even though best hyperparameter sets were close for RC with common input scaling and for RC with multiple input scaling.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -1208,7 +1208,7 @@ Figure&nbsp;12: Hyperparameter evaluation on training set by random search. Hp s
 </div>
 </div>
 </div>
-<p>Figure <a href="#fig-ucHyperparamMultipleIS" class="quarto-xref">Figure&nbsp;13</a> shows the hyperparameter search for RC with multiple input scaling and connected input layer. We observe that the random search tend to favor high importance given to derivative of positive RT-PCR (including the elderly) and the derivative of IPTCC. The rest of the feature do not show clear pattern.</p>
+<p><a href="#fig-ucHyperparamMultipleIS" class="quarto-xref">Figure&nbsp;13</a> shows the hyperparameter search for RC with multiple input scaling and connected input layer. We observe that the random search tend to favor high importance given to derivative of positive RT-PCR (including the elderly) and the derivative of IPTCC. The rest of the feature do not show clear pattern.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-ucHyperparamMultipleIS" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -3566,7 +3566,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb34-876"><a href="#cb34-876" aria-hidden="true" tabindex="-1"></a><span class="in">ls_use_case &lt;- readRDS(file = here::here("data/precomputed_results.rds"))</span></span>
 <span id="cb34-877"><a href="#cb34-877" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-878"><a href="#cb34-878" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-879"><a href="#cb34-879" aria-hidden="true" tabindex="-1"></a>The goal of this task is to predict 14 days ahead the hospitalization. Figure @fig-ucPresentData shows both the training set (i.e before 2021-03-01) and the test set where the blue curve correspond to the input features (first derivatives are not shown) and the orange curves correspond to the outcome the model is trained on (i.e the hospitalization variation) and the hospitalizations at 14 days on which the performance metrics are computed. The figures outline that the relation between the input features and the outcome evolve over time and that the time series is not stationary. For instance IPTCC (*Index PREDICT de Transmissivité Climatique de la COVID-19*) seems correlated to the outcome except that it completely miss the summer 2021 increase.</span>
+<span id="cb34-879"><a href="#cb34-879" aria-hidden="true" tabindex="-1"></a>The goal of this task is to predict 14 days ahead the hospitalization. @fig-ucPresentData shows both the training set (i.e before 2021-03-01) and the test set where the blue curve correspond to the input features (first derivatives are not shown) and the orange curves correspond to the outcome the model is trained on (i.e the hospitalization variation) and the hospitalizations at 14 days on which the performance metrics are computed. The figures outline that the relation between the input features and the outcome evolve over time and that the time series is not stationary. For instance IPTCC (*Index PREDICT de Transmissivité Climatique de la COVID-19*) seems correlated to the outcome except that it completely miss the summer 2021 increase.</span>
 <span id="cb34-880"><a href="#cb34-880" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-881"><a href="#cb34-881" aria-hidden="true" tabindex="-1"></a><span class="in">```{r ucPresentData, echo = FALSE}</span></span>
 <span id="cb34-882"><a href="#cb34-882" aria-hidden="true" tabindex="-1"></a><span class="in">#| label: fig-ucPresentData</span></span>
@@ -3578,7 +3578,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb34-888"><a href="#cb34-888" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-889"><a href="#cb34-889" aria-hidden="true" tabindex="-1"></a><span class="fu">### Hyperparameter selection</span></span>
 <span id="cb34-890"><a href="#cb34-890" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-891"><a href="#cb34-891" aria-hidden="true" tabindex="-1"></a>Figure @fig-ucHyperparam shows the hyperparameter optimisation using random search for the different RC architectures. We observe that model with multiple input scaling achieved better performance on the train set compared to model with single input scaling which is expected as they can adapt more closely to the data thanks to specific input scaling for each feature.</span>
+<span id="cb34-891"><a href="#cb34-891" aria-hidden="true" tabindex="-1"></a>@fig-ucHyperparam shows the hyperparameter optimisation using random search for the different RC architectures. We observe that model with multiple input scaling achieved better performance on the train set compared to model with single input scaling which is expected as they can adapt more closely to the data thanks to specific input scaling for each feature.</span>
 <span id="cb34-892"><a href="#cb34-892" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-893"><a href="#cb34-893" aria-hidden="true" tabindex="-1"></a>As expected, we observe that the optimal leaking rate is above 1e-2 for all RC which is coherent with the short term dynamic of covid-19 epidemic. Trend for other hyperparameter are less clear even though best hyperparameter sets were close for RC with common input scaling and for RC with multiple input scaling.</span>
 <span id="cb34-894"><a href="#cb34-894" aria-hidden="true" tabindex="-1"></a></span>
@@ -3590,7 +3590,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb34-900"><a href="#cb34-900" aria-hidden="true" tabindex="-1"></a><span class="in">ls_use_case$plot_reservoir_hp</span></span>
 <span id="cb34-901"><a href="#cb34-901" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-902"><a href="#cb34-902" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-903"><a href="#cb34-903" aria-hidden="true" tabindex="-1"></a>Figure @fig-ucHyperparamMultipleIS shows the hyperparameter search for RC with multiple input scaling and connected input layer. We observe that the random search tend to favor high importance given to derivative of positive RT-PCR (including the elderly) and the derivative of IPTCC. The rest of the feature do not show clear pattern.</span>
+<span id="cb34-903"><a href="#cb34-903" aria-hidden="true" tabindex="-1"></a>@fig-ucHyperparamMultipleIS shows the hyperparameter search for RC with multiple input scaling and connected input layer. We observe that the random search tend to favor high importance given to derivative of positive RT-PCR (including the elderly) and the derivative of IPTCC. The rest of the feature do not show clear pattern.</span>
 <span id="cb34-904"><a href="#cb34-904" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-905"><a href="#cb34-905" aria-hidden="true" tabindex="-1"></a><span class="in">```{r ucHyperparamMultipleIS, echo=FALSE}</span></span>
 <span id="cb34-906"><a href="#cb34-906" aria-hidden="true" tabindex="-1"></a><span class="in">#| label: fig-ucHyperparamMultipleIS</span></span>

@@ -842,7 +842,7 @@ Finally, we provided an additional Enet model similar to the one in @ferte_benef
 ls_use_case <- readRDS(file = here::here("data/precomputed_results.rds"))
 ```
 
-The goal of this task is to predict 14 days ahead the hospitalization. Figure @fig-ucPresentData shows both the training set (i.e before 2021-03-01) and the test set where the blue curve correspond to the input features (first derivatives are not shown) and the orange curves correspond to the outcome the model is trained on (i.e the hospitalization variation) and the hospitalizations at 14 days on which the performance metrics are computed. The figures outline that the relation between the input features and the outcome evolve over time and that the time series is not stationary. For instance IPTCC (*Index PREDICT de Transmissivité Climatique de la COVID-19*) seems correlated to the outcome except that it completely miss the summer 2021 increase.
+The goal of this task is to predict 14 days ahead the hospitalization. @fig-ucPresentData shows both the training set (i.e before 2021-03-01) and the test set where the blue curve correspond to the input features (first derivatives are not shown) and the orange curves correspond to the outcome the model is trained on (i.e the hospitalization variation) and the hospitalizations at 14 days on which the performance metrics are computed. The figures outline that the relation between the input features and the outcome evolve over time and that the time series is not stationary. For instance IPTCC (*Index PREDICT de Transmissivité Climatique de la COVID-19*) seems correlated to the outcome except that it completely miss the summer 2021 increase.
 
 ```{r ucPresentData, echo = FALSE}
 #| label: fig-ucPresentData
@@ -854,7 +854,7 @@ ls_use_case$plot_present_data
 
 ### Hyperparameter selection
 
-Figure @fig-ucHyperparam shows the hyperparameter optimisation using random search for the different RC architectures. We observe that model with multiple input scaling achieved better performance on the train set compared to model with single input scaling which is expected as they can adapt more closely to the data thanks to specific input scaling for each feature.
+@fig-ucHyperparam shows the hyperparameter optimisation using random search for the different RC architectures. We observe that model with multiple input scaling achieved better performance on the train set compared to model with single input scaling which is expected as they can adapt more closely to the data thanks to specific input scaling for each feature.
 
 As expected, we observe that the optimal leaking rate is above 1e-2 for all RC which is coherent with the short term dynamic of covid-19 epidemic. Trend for other hyperparameter are less clear even though best hyperparameter sets were close for RC with common input scaling and for RC with multiple input scaling.
 
@@ -866,7 +866,7 @@ As expected, we observe that the optimal leaking rate is above 1e-2 for all RC w
 ls_use_case$plot_reservoir_hp
 ```
 
-Figure @fig-ucHyperparamMultipleIS shows the hyperparameter search for RC with multiple input scaling and connected input layer. We observe that the random search tend to favor high importance given to derivative of positive RT-PCR (including the elderly) and the derivative of IPTCC. The rest of the feature do not show clear pattern.
+@fig-ucHyperparamMultipleIS shows the hyperparameter search for RC with multiple input scaling and connected input layer. We observe that the random search tend to favor high importance given to derivative of positive RT-PCR (including the elderly) and the derivative of IPTCC. The rest of the feature do not show clear pattern.
 
 ```{r ucHyperparamMultipleIS, echo=FALSE}
 #| label: fig-ucHyperparamMultipleIS

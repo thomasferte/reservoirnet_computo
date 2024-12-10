@@ -1,3 +1,5 @@
+[![build and publish](https://github.com/thomasferte/reservoirnet_computo/actions/workflows/build.yml/badge.svg)](https://github.com/thomasferte/reservoirnet_computo/actions/workflows/build.yml)
+
 # Reservoir Computing in R: a Tutorial for Using reservoirnet to Predict Complex Time-Series
 
 Reservoir Computing (RC) is a machine learning method based on neural networks that

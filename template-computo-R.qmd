@@ -279,7 +279,7 @@ reservoir <- reservoirnet::createNode(nodeType = "Reservoir",
                                       input_scaling = 1)
 ```
 
-Then we can feed the data to the reservoir and see the activation state of the reservoir $x(t)$. To do so, we first prepare the data and transform it to a matrix:
+Then we can feed the data to the reservoir and see the activation state of the reservoir $x(t)$. To do so, we first prepare the data and transform it to a matrix.
 
 ```{r}
 ## select explanatory features of the train set and transform it to an array
@@ -346,7 +346,7 @@ linearly combines the neuron's output.
 
 #### Set the ESN
 
-Initially, we establish the output layer, incorporating a ridge penalty set at `1e3`. It's important to note that this hyperparameter can be subject to optimization, a topic that will be explored in @sec-studycase. This parameter plays a pivotal role in fine-tuning the model's conformity to the data. When set excessively high, the risk of underfitting arises, whereas setting it too low can lead to overfitting. We connect the output layer to the reservoir making the model ready to be trained.
+Initially, we establish the output layer with the `createNode()` function, incorporating a ridge penalty set at `1e3`. It's important to note that this hyperparameter can be subject to optimization, a topic that will be explored in @sec-studycase. This parameter plays a pivotal role in fine-tuning the model's conformity to the data. When set excessively high, the risk of underfitting arises, whereas setting it too low can lead to overfitting. We connect the output layer to the reservoir, with the `link()` function, making the model ready to be trained.
 
 ```{r}
 readout <- reservoirnet::createNode(nodeType = "Ridge",
@@ -404,7 +404,7 @@ lsdf <- lapply(list(yTrain = yTrain,
 
 #### Train the model and predict
 
-We then feed the reservoir with the train set. To do so, we set a `warmup` of `30` days during which the data are propagating into the reservoir but not used to fit the output layer.
+We then feed the reservoir with the train set using the `reservoirR_fit()` function. To do so, we set a `warmup` of `30` days during which the data are propagating into the reservoir but not used to fit the output layer.
 
 ```{r results='hide'}
 ### train the reservoir ridge output
@@ -415,7 +415,7 @@ fit <- reservoirnet::reservoirR_fit(node = model,
                                     reset = TRUE)
 ```
 
-Now that the ridge layer is trained, we can forecast. We set the parameter `reset` to `TRUE` in order to clean the reservoir from the data used by the training set.
+Now that the ridge layer is trained, we can forecast using the `predict_seq()` function. We set the parameter `reset` to `TRUE` in order to clean the reservoir from the data used by the training set.
 
 ```{r}
 # Forecast with the trained reservoir on the test data
@@ -553,7 +553,7 @@ The primary objective involves the attribution of each utterance to its respecti
 
 ### Classification (sequence-to-vector model)
 
-The first approach is the sequence-to-vector encoding. For this task we aim to predict the speaker of the whole utterance (i.e the label is assigned to the whole sequence). We first start by creating the reservoir and the output layer.
+The first approach is the sequence-to-vector encoding. For this task we aim to predict the speaker of the whole utterance (i.e the label is assigned to the whole sequence). We first start by creating the reservoir and the output layer using `createNode()` function.
 
 ```{r}
 reservoir <- reservoirnet::createNode("Reservoir", units = 500,

@@ -37,14 +37,6 @@ author:
         department: Inserm Bordeaux Population Health Research Center UMR 1219, team AHeaD, F-33000 Bordeaux
       - name: CHU de Bordeaux
         department: "Bordeaux Hospital University Center, Pôle de santé publique, Service d'information médicale, F-33000 Bordeaux, France"
-  - name: Romain Griffier
-    corresponding: false
-    orcid: 0000-0002-1096-137X
-    affiliations:
-      - name: Inserm
-        department: Inserm Bordeaux Population Health Research Center UMR 1219, team AHeaD, F-33000 Bordeaux
-      - name: CHU de Bordeaux
-        department: "Bordeaux Hospital University Center, Pôle de santé publique, Service d'information médicale, F-33000 Bordeaux, France"
   - name: Rodolphe Thiébaut
     corresponding: false
     orcid: 0000-0002-5235-3962
@@ -64,6 +56,7 @@ author:
       - name: LaBRI
         department: LaBRI, Univ. Bordeaux, Bordeaux INP, CNRS UMR 5800.
   - name: Boris Hejblum
+    email: boris.hejblum@u-bordeaux.fr
     corresponding: true
     orcid: 0000-0003-0646-452X
     affiliations:
@@ -1270,6 +1263,14 @@ Drawing on the robust foundation of the `ReservoirPy` structure, a well-maintain
 <!-- ## Data and large files -->
 
 <!-- If your submission materials contain files larger than 50MB, **especially data files**, they won’t fit on a git repository as is. For this reason, we encourage you to put your data or any materials you deem necessary on an external “open data” centered repository hub such a [Zenodo](https://zenodo.org/) or [OSF](https://osf.io/). -->
+
+# Acknowledgements {.unnumbered}
+
+We thank Romain Griffier for his expertise on the Bordeaux University Hospital Data.
+
+Experiments presented in this paper were conducted using the PlaFRIM experimental testbed, supported by Inria, CNRS (LABRI and IMB), Université de Bordeaux, Bordeaux INP and Conseil Régional d’Aquitaine (see https://www.plafrim.fr), as well as by the MCIA (Mésocentre de Calcul Intensif Aquitain).
+
+This study was carried out in the framework of the University of Bordeaux's France 2030 program / RRI PHDS.
 
 # References {.unnumbered}
 

@@ -191,7 +191,6 @@ We can proceed by loading useful packages - namely `ggplot2` @wickham_ggplot2_20
 # Load usefull packages
 library(dplyr)
 library(ggplot2)
-library(patchwork)
 library(reservoirnet)
 # load dfCovid data from the reservoirnet package which contains Covid data
 data("dfCovid")
@@ -914,20 +913,19 @@ ls_use_case$plot_feature_input_scaling
 #| tbl-cap: "Model performance with several reservoir configuration. For each setting, 40 reservoirs are computed and the forecast is the median of the 40 forecasts. Results show the performance metrics : MAE = Mean Absolute Error, MRE = Median Relative Error, MAEB = Mean Absolute Error to Baseline, MREB = Median Relative Error to Baseline."
 # performance of the different model
 ls_use_case$table_perf_esn %>%
-  gt::gt() %>%
-  gt::tab_header(
-    title = "Model Performance"
+  dplyr::mutate(model = gsub(model,
+                             pattern = "IS \n\n", replacement = "IS:")) %>%
+  dplyr::rename(
+    Model = model,
+    MAE = mae,
+    MRE = mre,
+    MAEB = mae_baseline,
+    MREB = mre_baseline
   ) %>%
-  gt::cols_label(
-    model = "Model",
-    mae = "MAE",
-    mre = "MRE",
-    mae_baseline = "MAEB",
-    mre_baseline = "MREB"
-  ) %>%
-  gt::fmt_number(
-    columns = c(mae, mre, mae_baseline, mre_baseline),
-    decimals = 2
+  knitr::kable(
+    digits = 2,
+    caption = "Model Performance",
+    format = "html" # Use "latex" for LaTeX output or "markdown" for plain Markdown
   )
 ```
 

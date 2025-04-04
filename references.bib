@@ -746,6 +746,52 @@ While allowing for maximal care of Covid-19 patients during the pandemic, the sh
 	file = {Snapshot:/home/tf1/Zotero/storage/JIZ3UXAX/six-months-later.html:text/html},
 }
 
+@article{zhang2022catch22s,
+  title     = {Catch-22s of Reservoir Computing},
+  author    = {Zhang, Yuanzhao and Cornelius, Sean P.},
+  journal   = {arXiv preprint arXiv:2210.10211},
+  year      = {2022},
+  url       = {https://arxiv.org/abs/2210.10211}
+}
+
+@article{zhang2024instability,
+ title   = {How More Data Can Hurt: Instability and Regularization in Next-Generation Reservoir Computing},
+ author  = {Zhang, Yuanzhao and Cornelius, Sean P.},
+ journal  = {arXiv preprint arXiv:2407.08641},
+ year   = {2024},
+ url    = {https://arxiv.org/abs/2407.08641}
+}
+
+@InProceedings{ferte_reservoir_2024,
+  title = 	 {Reservoir Computing for Short High-Dimensional Time Series: an Application to {SARS}-{C}o{V}-2 Hospitalization Forecast},
+  author =       {Ferté, Thomas and Dutartre, Dan and Hejblum, Boris P and Griffier, Romain and Jouhet, Vianney and Thi\'{e}baut, Rodolphe and Legrand, Pierrick and Hinaut, Xavier},
+  booktitle = 	 {Proceedings of the 41st International Conference on Machine Learning},
+  pages = 	 {13570--13591},
+  year = 	 {2024},
+  editor = 	 {Salakhutdinov, Ruslan and Kolter, Zico and Heller, Katherine and Weller, Adrian and Oliver, Nuria and Scarlett, Jonathan and Berkenkamp, Felix},
+  volume = 	 {235},
+  series = 	 {Proceedings of Machine Learning Research},
+  month = 	 {21--27 Jul},
+  publisher =    {PMLR},
+  pdf = 	 {https://raw.githubusercontent.com/mlresearch/v235/main/assets/ferte24a/ferte24a.pdf},
+  url = 	 {https://proceedings.mlr.press/v235/ferte24a.html},
+  abstract = 	 {In this work, we aimed at forecasting the number of SARS-CoV-2 hospitalized patients at 14 days to help anticipate the bed requirements of a large scale hospital using public data and electronic health records data. Previous attempts led to mitigated performance in this high-dimension setting; we introduce a novel approach to time series forecasting by providing an alternative to conventional methods to deal with high number of potential features of interest (409 predictors). We integrate Reservoir Computing (RC) with feature selection using a genetic algorithm (GA) to gather optimal non-linear combinations of inputs to improve prediction in sample-efficient context. We illustrate that the RC-GA combination exhibits excellent performance in forecasting SARS-CoV-2 hospitalizations. This approach outperformed the use of RC alone and other conventional methods: LSTM, Transformers, Elastic-Net, XGBoost. Notably, this work marks the pioneering use of RC (along with GA) in the realm of short and high-dimensional time series, positioning it as a competitive and innovative approach in comparison to standard methods.}
+}
+
+@inproceedings{ferte_optimizing_2024,
+	title = {Optimizing {Reservoir} {Computing} with {Genetic} {Algorithm} for {High}-{Dimensional} {SARS}-{CoV}-2 {Hospitalization} {Forecasting}: {Impacts} of {Genetic} {Algorithm} {Hyperparameters} on {Feature} {Selection} and {Reservoir} {Computing} {Hyperparameter} {Tuning}},
+	copyright = {All rights reserved},
+	shorttitle = {Optimizing {Reservoir} {Computing} with {Genetic} {Algorithm} for {High}-{Dimensional} {SARS}-{CoV}-2 {Hospitalization} {Forecasting}},
+	url = {https://inria.hal.science/hal-04905975},
+	abstract = {This study focuses on forecasting SARS-CoV-2 hospitalizations 14 days ahead at Bordeaux University Hospital using a high-dimensional dataset with 409 predictors and 586 observations, combining public data and electronic health records. Previous research showed that integrating reservoir computing (RC) with genetic algorithm (GA) for hyperparameter optimization and feature selection outperformed state-of-the-art methods. However, the behavior of RC-GA under high-dimensional conditions is not well understood. This work examines the impact of GA hyperparameters (GA-HP), specifically the mutation probability of feature selection and the extent of mutation on a critical RC hyperparameter (RC-HP), the leaking rate. GA-HP significantly influence feature selection and RC-HP optimization. Higher mutation rates led to a more diverse set of selected features and fewer total features, resulting in increased mean absolute error (MAE) on the training set but comparable MAE on the test set, suggesting reduced overfitting. Conversely, lower mutation rates of categorical genes and leaking rates correlated with slightly poorer performance, indicating potential lack of exploration during RC-HP selection. Notably, a bimodal Ferté et al. convergence of the leaking rate was observed, with lower leaking rates enhancing training performance but slightly diminishing test performance. The RC-GA approach demonstrated robust behavior with higher leaking rates, possibly due to increased regularization effects from higher ridge values. Optimizing RC-GA in a high-dimensional setting remains challenging. Current practices using the median forecast of the top 40 RC-HP sets might not be optimal. Enhancing GA for high-dimensional contexts and exploring complementary RC-HP sets instead of selecting the top 40 might further improve forecasting accuracy.},
+	language = {en},
+	urldate = {2025-03-17},
+	author = {Ferté, Thomas and Dutartre, Dan and Hejblum, Boris P. and Griffier, Romain and Jouhet, Vianney and Thiébaut, Rodolphe and Hinaut, Xavier and Legrand, Pierrick},
+	month = oct,
+	year = {2024},
+	file = {Full Text PDF:/home/tf1/Zotero/storage/IYB8F8CI/Ferté et al. - 2024 - Optimizing Reservoir Computing with Genetic Algori.pdf:application/pdf},
+}
+
 @article{ferte_benefit_2022,
 	title = {The benefit of augmenting open data with clinical data-warehouse {EHR} for forecasting {SARS}-{CoV}-2 hospitalizations in {Bordeaux} area, {France}},
 	volume = {5},

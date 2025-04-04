@@ -120,25 +120,25 @@ knitr::include_graphics("images/image1.png")
 
 The input layer $u(t)$ is an $M$-dimension vector, where $M$ is the number of input time series, which corresponds to the values of the input time series at time $t$ where $t = 1, \dots, T$. The reservoir layer $x(t)$ is an $N_{res}$-dimensional vector where $N_{res}$ is the number of nodes in the reservoir. The value $x(t)$ is defined as follow:
 \begin{equation}
-x( t+1 ) = ( 1 - \alpha )  x ( t) + \alpha \: tanh\left( W x(t) + W_{in} u(t+1)\right)
+x( t+1 ) = ( 1 - \alpha )  x ( t) + \alpha \: tanh\left( W x(t) + W_{in} u(t+1)\right).
 \end{equation}
 
-The leaking rate $\alpha \in [0, 1]$ defines the update rate of the nodes. The closer $\alpha$ is to $1$, the more the reservoir is sensitive to new inputs $u(t)$. Therefore, the reservoir state at time $t+1$ denoted $x(t+1)$ depends on the reservoir state at the previous time $x(t)$ and the new inputs $u(t+1)$. Both $W_{in}$ and $W$ are random matrices of size $N_{res} \times M$ and $N_{res} \times N_{res}$ respectively.
+The leaking rate $\alpha \in [0, 1]$ defines the update rate of the nodes. The closer $\alpha$ is to $1$, the more the reservoir is sensitive to new inputs $u(t)$. Therefore, the reservoir state at time $t+1$ denoted $x(t+1)$ depends on the reservoir state at the previous time $x(t)$ and the new inputs $u(t+1)$. The function $tanh()$ represents the activation function, applied element-wise to each component of the vector, ensuring that each node’s activation is scaled between $-1$ and $1$. Both $W_{in}$ and $W$ are random matrices of size $N_{res} \times M$ and $N_{res} \times N_{res}$ respectively.
 
 $W_{in}$ is a matrix (usually sparse) generated using a Bernoulli (bimodal) distribution where each value can be either $-I_{scale}(m)$ or $I_{scale}(m)$ with an equal probability where $m = 1, \dots, M$ corresponds to a given feature in the input layer. The input scaling, denoted $I_{scale}$, is a hyperparameter coefficient common to all features from the input layer or specific to each feature $m$. In that case, the more important the feature is, the greater should be its input scaling. $W$ is a matrix (usually sparse) where values are generated from a Gaussian distribution $\mathcal{N}(0,1)$. Then, the $W$ matrix is scaled according to the defined spectral radius, a hyperparameter defining the highest eigen value of $W$.
 
 The final layer is a linear regression with ridge penalization where the
 explanatory features are the reservoir state and the variable to be
 explained is the outcome to predict such that:
-$$W_{out} = YX^T ( XX^T + \lambda  I)^{ -1 }$$
+$$W_{out} = YX^T ( XX^T + \lambda  I)^{ -1 }.$$
 Where x(t) and y(t) are accumulated in X and Y respectively such that:
 $$
 X = \begin{bmatrix} x(1) \\ x(2) \\ ... \\ x(T) \end{bmatrix}
-\text{ and } Y = \begin{bmatrix} y(1) \\ y(2) \\ ... \\ y(T) \end{bmatrix}
+\text{ and } Y = \begin{bmatrix} y(1) \\ y(2) \\ ... \\ y(T) \end{bmatrix}.
 $$
 The parameter $\lambda$ is the ridge penalization which aims to prevent overfitting. Additionally, one can also connect the input layer to the output layer to the reservoir nodes. In that case, $X$ is the accumulation of both such that :
 $$X = \begin{bmatrix} x(1), u(1) \\ x(2), u(2) \\ ... \\ x(T), u(T) \end{bmatrix}
-\text{ and } Y = \begin{bmatrix} y(1) \\ y(2) \\ ... \\ y(T) \end{bmatrix}$$
+\text{ and } Y = \begin{bmatrix} y(1) \\ y(2) \\ ... \\ y(T) \end{bmatrix}.$$
 
 Overall, there are four main hyperparameters to be chosen by the user: i) the leaking rate which defines the memory of the RC, ii) the input scaling which defines the relative importance of the features, iii) the spectral radius which defines the connections of the neurons inside the reservoir which in turn defines the degree of non-linear combination of features, and iv) the ridge penalization which controls the degree of overfitting. The choice of hyperparameters often requires the user to evaluate the performance of different combinations of hyperparameters on a validation set before selecting the optimal combination to forecast on the test set.
 
@@ -154,14 +154,25 @@ installation, classification and regression. A more in depth description is prov
 
 `reservoirnet` is an `R` package making the `Python` module  `ReservoirPy`
 easily callable from `R` using `reticulate` R package @reticulate_2024. It is available on CRAN (see
-[https://cran.r-project.org/package=reservoirnet](https://cran.r-project.org/package=reservoirnet)) and can be installed
-using:
+[https://cran.r-project.org/package=reservoirnet](https://cran.r-project.org/package=reservoirnet)) and can be installed using:
 
 ```{r eval=FALSE}
 # Install reservoirnet package from CRAN
 install.packages("reservoirnet")
 ```
 
+Alternatively, it can also be installed from GitHub:
+
+```{r eval=FALSE}
+# Install reservoirnet package from GitHub
+devtools::install_github(repo = "reservoirpy/reservoirR")
+```
+
+For `reservoirnet` to work, it will require `Python` version 3.8 or higher, along with the `reservoirpy` module which can be installed with the `install_reservoirpy()` function:
+
+```{r eval=FALSE}
+reservoirnet::install_reservoirpy()
+```
 
 Reservoir Computing (RC) is well suited to both regression and
 classification tasks. We will introduce a simple example for both task.
@@ -183,7 +194,7 @@ This function accepts several arguments to specify the hyperparameters of the re
 
 ### Covid-19 data
 
-In this first use-case, we will introduce the fundamental usage of the `reservoirnet` package. This demonstration will be conducted using the COVID-19 dataset that is included within the package. These data encompass hospitalization, positive RT-PCR (Reverse Transcription Polymerase Chain Reaction) results, and overall RT-PCR data sourced from Santé Publique France, which are publicly available on data.gouv.fr (for further details, refer to `help(dfCovid)`). Our primary objective is to predict the number of hospitalized patients 14 days into the future. To accomplish this, we will initially train our model on data preceding the date of January 1, 2022, and subsequently apply it to forecast values using the subsequent dataset.
+In this first use-case, we will introduce the fundamental usage of the `reservoirnet` package. This demonstration will be conducted using the COVID-19 dataset that is included within the package. These data encompass hospitalization, positive RT-PCR (Reverse Transcription Polymerase Chain Reaction) results, and overall RT-PCR data sourced from Santé Publique France, which are publicly available on data.gouv.fr (for further details, refer to `help(dfCovid)`). Our primary objective is to predict the number of hospitalized patients 14 days into the future. To accomplish this, we will initially train our model on data preceding the date of January 1, 2022, and then apply it to forecast values using the following dataset.
 
 We can proceed by loading useful packages - namely `ggplot2` @wickham_ggplot2_2016 and `dplyr` @wickham_dplyr_2023, data and define the task:
 
@@ -236,7 +247,7 @@ dfOutcome <- dfCovid %>%
 
 ```{r covidintro, echo = FALSE}
 #| label: fig-covidintro
-#| fig-cap: "Hospitalizations, number of positive RT-PCR and number ofx RT-PCR of Bordeaux University Hospital."
+#| fig-cap: "Hospitalizations, number of positive RT-PCR and number of RT-PCR of Bordeaux University Hospital."
 # Create a figure with hospitalizations, positive and tested RT-PCR from covid data
 dfOutcome %>%
   tidyr::pivot_longer(cols = c("hosp", "Positive", "Tested")) %>%
@@ -250,11 +261,20 @@ dfOutcome %>%
 
 ### First reservoir
 
+```{r schemaregression, echo=FALSE}
+#| label: fig-schemaregression
+#| fig-cap: "Regression use case: Forecasting the number of hospitalized patients 14 days ahead."
+#| out.width: "75%"
+knitr::include_graphics("images/regression_usecase.PNG")
+```
+
+The objective of this task is to train a RC model using the input features to forecast the number of hospitalized patients 14 days ahead, as illustrated in Figure @fig-schemaregression.
+
 Setting a reservoir is done with the `createNode()` function. The important hyperparameters are the following :
 
 -   Number of nodes (`units`) : it corresponds to the number of nodes inside the reservoir. Usually, the more the better, but more nodes increases the computation time.
 -   Leaking rate (`lr`) : the leaking rate corresponds to the balance between the new inputs and the previous state. A leaking rate of 1 only consider information from new inputs.
--   Spectral radius (`sr`): the spectral radius is the maximum absolute eigenvalue of the reservoir connectivity matrix. A small spectral radius induces stable dynamics inside the reservoir, a high spectral radius induces a chaotic regime inside the reservoir.
+-   Spectral radius (`sr`): the spectral radius is the largest eigenvalue in modulus of the reservoir connectivity matrix. A small spectral radius induces stable dynamics inside the reservoir, a high spectral radius induces a chaotic regime inside the reservoir.
 -   Input scaling (`input_scaling`): the input scaling is a gain applied to the input features of the reservoir.
 -   Warmup (`warmup`) : it corresponds to the number of time step during which the data are propagating into the reservoir but not used to fit the output layer. This hyperparameter is set in the `reservoirR_fit()` function.
 
@@ -355,7 +375,7 @@ linearly combines the neuron's output.
 
 #### Set the ESN
 
-Initially, we establish the output layer with the `createNode()` function, incorporating a ridge penalty set at `1e3`. It's important to note that this hyperparameter can be subject to optimization, a topic that will be explored in @sec-studycase. This parameter plays a pivotal role in fine-tuning the model's conformity to the data. When set excessively high, the risk of underfitting arises, whereas setting it too low can lead to overfitting. We connect the output layer to the reservoir, with the `link()` function, making the model ready to be trained.
+Initially, we establish the output layer with the `createNode()` function, incorporating a ridge penalty set at `1e3`. It's important to note that this hyperparameter can be subject to optimization, a topic that will be explored in @sec-studycase. This parameter plays a pivotal role in fine-tuning the model's conformity to the data. When set excessively high, the risk of underfitting arises, whereas setting it too low can lead to overfitting. We connect the output layer to the reservoir, with the `%>>%` operator, making the model ready to be trained.
 
 ```{r}
 readout <- reservoirnet::createNode(nodeType = "Ridge",
@@ -370,9 +390,9 @@ readout <- reservoirnet::createNode(nodeType = "Ridge",
 # Ridge regression is used to prevent overfitting by adding a penalty on the
 # size of the coefficients.
 
-model <- reservoirnet::link(reservoir, readout)
+model <- reservoir %>>% readout
 # Link the reservoir and readout nodes to form a complete reservoir computing
-# model. The 'link' function connects the high-dimensional state generated by
+# model. The '%>>%' operator connects the high-dimensional state generated by
 # the reservoir to the readout layer, allowing the model to learn the mapping
 # from the reservoir states to the target outputs.
 ```
@@ -568,7 +588,14 @@ ggplot(dfplot_vowel, mapping = aes(x = Time, y = LPC, color = component)) +
 
 ```
 
-The primary objective involves the attribution of each utterance to its respective speaker, this is denoted as classification or sequence-to-vector encoding. The secondary objective involves the attribution of each time step of each utterance to its speaker, this is denoted as transduction or sequence-to-sequence encoding.
+```{r schemaclassif, echo=FALSE}
+#| label: fig-schemaclassif
+#| fig-cap: "Classification use-case, identifying the speaker from an utterance."
+#| out.width: "75%"
+knitr::include_graphics("images/classif_usecase.PNG")
+```
+
+The primary objective involves the attribution of each utterance to its respective speaker, this is denoted as classification or sequence-to-vector encoding. The secondary objective involves the attribution of each time step of each utterance to its speaker, this is denoted as transduction or sequence-to-sequence encoding. While this second approach may seem somewhat superfluous in this context, it could be useful, for example, in cases where multiple speakers take turns speaking, allowing us to identify which sequence belongs to each individual speaker. Figure @fig-schemaregression illustrates this task.
 
 ### Classification (sequence-to-vector model)
 
@@ -598,48 +625,27 @@ readout <- reservoirnet::createNode("Ridge",ridge=1e-6)
 # size of the coefficients.
 ```
 
-To perform this task, we need to modify the training and testing processes. Leveraging the inherent inertia of the reservoir, information from preceding time steps is preserved, effectively endowing the RC with a form of memory. Consequently, the final state vector encapsulates insights gathered from all antecedent states. In the context of the sequence-to-vector encoding task, only this ultimate state is employed. This process is executed as follows:
+To perform this task, we need to modify the training and testing processes. Leveraging the inherent inertia of the reservoir, information from preceding time steps is preserved, effectively endowing the RC with a form of memory. Consequently, the final state vector encapsulates insights gathered from all antecedent states. In the context of the sequence-to-vector encoding task, only the final state is used. To simplify this process, we introduce the `last_reservoir_state()` function, which extracts the final reservoir state. This process is executed as follows:
 
 ```{r}
-states_train = list()
-k <- 1
-for (x in X_train) {
-  # Loop over each training sample in X_train.
-  states <- reservoirnet::predict_seq(node = reservoir, X = x,
-                                      reset=TRUE)
-  # Generate the reservoir states for the current training sample using the
-  # 'predict_seq' function.
-  states_train[[k]] <- t(as.matrix(states[nrow(states),]))
-  # Extract the final reservoir state for the current sample and store it in
-  # 'states_train'.
-  k <- k+1
-}
+states_train <- reservoirnet::last_reservoir_state(node = reservoir, X = X_train)
 ```
 
-Then we can train the readout based on this last state vector. In that case, `Y_train` contains a single label for each utterance.
+Then, we use only the final state for prediction. We first extract the final state using the `last_reservoir_state()` function and then use the trained readout to predict the vowel using the `predict_seq()` function with the `seq_to_vec` parameter set to `TRUE`:
 
 ```{r results='hide'}
 # Fit the reservoir using the last state vector (each observation is the whole
 # vowel sequence)
-res <- reservoirnet::reservoirR_fit(readout,X = states_train, Y = Y_train)
+res <- reservoirnet::reservoirR_fit(node = readout, X = states_train, Y = Y_train)
 ```
 
-The prediction is also modified using only the final state :
+Then we can perform the prediction using only the final state. We first get the final state using the `last_reservoir_state()` function and use the trained readout to predict the vowel using the `predict_seq()` function with the `seq_to_vec` parameter set to `TRUE`.
 
 ```{r}
 # The operation is repeated for the test set :
-# - the last state vector is extracted for each utterance
-# - the model is used to forecast the utterance from this last state vector
-Y_pred <- list()
-k <- 1
-for (x in X_test) {
-  states <- reservoirnet::predict_seq(node = reservoir, X = x,
-                                      reset=TRUE)
-  y <- reservoirnet::predict_seq(node = readout,
-                                 X = as.array(states[nrow(states),]))
-  Y_pred[[k]] <- y
-  k <- k+1
-}
+states_test <- reservoirnet::last_reservoir_state(node = reservoir, X = X_test)
+Y_pred <- reservoirnet::predict_seq(node = readout, X = states_test, seq_to_vec = TRUE)
+
 ```
 
 @fig-seqtovec shows the prediction for the 6 utterances depicted at @fig-vowelpresentation where the model correctly identifies the speaker.
@@ -713,7 +719,7 @@ X_test <- japanese_vowels$X_test
 Y_test <- japanese_vowels$Y_test
 ```
 
-Then we can train a simple Echo State Network to solve this task. For this example we will connect both the input layer and the reservoir layer to the readout layer which is performed by the `%>>%` operator :
+Then we can train a simple Echo State Network to solve this task. For this example, we will connect both the input layer and the reservoir layer to the readout layer, which is performed by the `%>>%` operator. This direct connection between the input layer and the output layer can be particularly useful when the relationship between the input sequences and the output is mostly linear, potentially improving performance, especially in tasks where linear dependencies play a significant role. Section @sec-studycase will explore this aspect in more detail through the SARS-CoV-2 prediction task.
 
 ```{r}
 # Create an input, a reservoir and an output layers
@@ -800,13 +806,13 @@ print(paste0("Accuracy: ", round(score * 100,3) ,"%"))
 
 Since late 2020, millions of cases of SARS-CoV-2 infection have been documented across the globe [@world_health_organisation_who_2020; @noauthor_estimating_2022; @carrat_evidence_2021]. This ongoing pandemic has exerted significant strain on healthcare systems, resulting in a surge in hospitalizations. This surge, in turn, necessitated modifications to the healthcare infrastructure and gave rise to population-wide lockdown measures aimed at preventing the saturation of healthcare facilities [@simoes_organisation_2021; @hubner_surgery_2020; @kim_health_2020]. The capacity to predict the trajectory of the epidemic on a regional scale is of paramount importance for effective healthcare system management.
 
-Numerous COVID-19 forecasting algorithms have been proposed using different methods (e.g ensemble, deep learning, compartmental), yet none has proven entirely satisfactory [@cramer_evaluation_2022-1; @rahimi_review_2021]. In France, short-term forecasts with different methods have been evaluated with similar results [@paireau_ensemble_2022; @carvalho_analysis_2021; @mohimont_convolutional_2021; @pottier_forecast_2021]. In this context a machine learning algorithm based on linear regression with elastic-net penalization, leveraging both Electronic Health Records (EHRs) and public data, was implemented at Bordeaux University Hospital [@ferte_benefit_2022]. This model, which aimed at forecasting the number of hospitalized patients at 14 days, showed good performance but struggled to accurately anticipate dynamic shifts of the epidemic.
+Numerous COVID-19 forecasting algorithms have been proposed using different methods (e.g ensemble, deep learning, mechanistic), yet none has proven entirely satisfactory [@cramer_evaluation_2022-1; @rahimi_review_2021]. In France, short-term forecasts with different methods have been evaluated with similar results [@paireau_ensemble_2022; @carvalho_analysis_2021; @mohimont_convolutional_2021; @pottier_forecast_2021]. In this context a machine learning algorithm based on linear regression with elastic-net penalization, leveraging both Electronic Health Records (EHRs) and public data, was implemented at Bordeaux University Hospital [@ferte_benefit_2022]. This model, which aimed at forecasting the number of hospitalized patients at 14 days, showed good performance but struggled to accurately anticipate dynamic shifts of the epidemic.
 
 RC has been used in the context of covid-19 epidemic forecast [@kmet_bezier_2019; @liu_nanophotonic_2023; @ray_optimized_2021; @zhang_sentiment_2023; @ghosh_reservoir_2021]. Among them, @ghosh_reservoir_2021, @liu_nanophotonic_2023 and @ray_optimized_2021 used it to forecast epidemic, @zhang_sentiment_2023 performed sentiment analysis and @kmet_bezier_2019 used it to solve optimal control related to vaccine. The evaluation of RC for epidemic forecast showed promising results in all approaches, being competitive with Long-Short Term Memory (LSTM) and Feed-Forward Neural Network (FFNN) in @ray_optimized_2021. However, the test period was short for @ghosh_reservoir_2021} (21 and 14 days) and @ray_optimized_2021 (86 days) making it difficult to evaluate the behavior of the methods during epidemic dynamic shift. This was not the case for @liu_nanophotonic_2023 (6 months) but they implemented daily ahead forecast which would be difficult to use to manage a hospital. Finally, all three implementations used only one time series as input whereas it has been shown that using different data sources could improve forecast @ferte_benefit_2022. Therefore, it is still difficult to assess the usefulness of RC over a large period and using many time series as inputs.
 
 RC can be viewed as an extension of penalized linear regression, where inputs undergo processing by a reservoir, introducing the capacity for memory and non-linear combinations. Given the effectiveness of penalized linear regression in COVID-19 forecasting, as highlighted in @ferte_benefit_2022, and the promising results exhibited by RC in epidemic forecasting, as demonstrated in studies such as @ghosh_reservoir_2021, @liu_nanophotonic_2023, and @ray_optimized_2021, we have opted to employ RC for the prediction of hospitalizations at 14 days at the University Hospital of Bordeaux.
 
-The primary aim of this study is to assess the performance of RC in this forecasting task. Secondary objectives include (i) comparing the performance of RC with that of elastic-net penalized regression (identified as the optimal model in @ferte_benefit_2022) and (ii) evaluating variations in RC performance based on different architectural choices, such as the connection between the input layer and the output layer, and the use of one input scaling per feature versus a common input scaling.
+The aim of this study is to showcase the use of `reservoirnet` for an advanced use case in forecasting the SARS-CoV-2 pandemic. Several architectural choices will be evaluated, such as the connection between the input layer and the output layer, and the use of either individual input scaling per feature or a common input scaling. The performance of Reservoir Computing (RC) will be compared with elastic-net penalized regression (identified as the optimal model in @ferte_benefit_2022), while a more in-depth comparison with other methods can be found in @ferte_reservoir_2024.
 
 ## Methods
 
@@ -820,16 +826,16 @@ All data are publicly available. Weather data can be obtained from @smith_integr
 
 ### Evaluation framework
 
-The task was to forecast 14 days ahead the number of hospitalized patients. As seen at @sec-basicregression, we will train the model to predict the variation of hospitalization, denoted as $hosp$, defined as $outcome_{t+14} = hosp_{t+14} - hosp_{t}$. Metrics computation and visualizations will be performed on the predicted number of hospitalizations denoted as $\widehat{hosp_{t+14}} = \widehat{outcome_{t+14}} + hosp_{t}$.
+The task was to forecast 14 days ahead the number of hospitalized patients. As seen at @sec-basicregression, we will train the model to predict the variation of hospitalization, denoted as $hosp$, defined as $outcome_{t+14} = hosp_{t+14} - hosp_{t}$ with $t = 1, ..., T$. Metrics computation and visualizations will be performed on the predicted number of hospitalizations denoted as $\widehat{hosp_{t+14}} = \widehat{outcome_{t+14}} + hosp_{t}$.
 
 The dataset was separated into two periods. First period from May 16, 2020 to March 1, 2021 served to identify relevant hyperparameters. Remaining data was used to evaluate the model performance.
 
 The performance of the model was evaluated according to several metrics:
 
-- the mean absolute error : $MAE = mean(|\widehat{hosp_{t+14}}-hosp_{t+14}|)$.
-- the median relative error : $MRE = median(|\frac{\widehat{hosp_{t+14}}-hosp_{t+14}}{hosp_{t+14}}|)$.
-- the mean absolute error to baseline : $MAEB =  mean(|\widehat{hosp_{t+14}}-hosp_{t+14}| - |hosp_{t}-hosp_{t+14}|)$.
-- the median relative error to baseline : $MREB = median(|\frac{\widehat{hosp_{t+14}}-hosp_{t+14}}{hosp_{t}-hosp_{t+14}}|)$)
+- the mean absolute error : $\text{MAE} = \frac{1}{T} \sum_{t=1}^{T} \left| \hat{hosp}_{t+14} - hosp_{t+14} \right|$.
+- the median relative error : $\text{MRE} = \text{median} \left( \left| \frac{\hat{hosp}_{t+14} - hosp_{t+14}}{hosp_{t+14}} \right| \right)$.
+- the mean absolute error to baseline : $\text{MAEB} = \frac{1}{T} \sum_{t=1}^{T} \left( \left| \hat{hosp}_{t+14} - hosp_{t+14} \right| - \left| hosp_{t} - hosp_{t+14} \right| \right)$.
+- the median relative error to baseline : $\text{MREB} = \text{median} \left( \left| \frac{\hat{hosp}_{t+14} - hosp_{t+14}}{hosp_{t} - hosp_{t+14}} \right| \right)$)
 
 Median was chosen over mean for $MRE$ and $MREB$ because those metrics tend to have extremely high values when the denominator is close to 0 (i.e when the number of hospitalized patients is close to 0 or the number of patients hospitalized at 14 days is close to the current number of hospitalized patients respectively). $MAEB$ and $MREB$ compare model performance to a baseline model which predicts the current number of hospitalized patients at 14 days. Those metrics help to determine the information added by the model and is a good baseline as covid-19 forecast model do not always outperform this basic forecast (@cramer_evaluation_2022-1).
 
@@ -837,7 +843,7 @@ Because the outcome is obfuscated below 10 hospitalizations for privacy reason, 
 
 ### Models
 
-We compared RC to elastic-net penalized regression (denoted as Enet). Furthermore we evaluated RC based on several architectures. First we compared RC with a single input scaling common to all features and a RC with on specific input scaling per feature. Second we compared RC where the input layer is connected to the output layer in addition to the connection between reservoir and output layer. Therefore, five models were evaluated :
+We compared RC to elastic-net penalized regression (denoted as Enet). Furthermore we evaluated RC based on several architectures. First we compared RC with a single input scaling common to all features and a RC with a specific input scaling per feature. Second we compared RC where the input layer is connected to the output layer in addition to the connection between reservoir and output layer. Therefore, five models were evaluated :
 
 - Elastic-net penalized regression denoted *Enet*
 - RC with a single input scaling and no connection between input and ouput layers denoted *Common IS R %>>% O*
@@ -886,7 +892,7 @@ ls_use_case$plot_present_data
 
 @fig-ucHyperparam shows the hyperparameter optimisation using random search for the different RC architectures. We observe that model with multiple input scaling achieved better performance on the train set compared to model with single input scaling which is expected as they can adapt more closely to the data thanks to specific input scaling for each feature.
 
-As expected, we observe that the optimal leaking rate is above 1e-2 for all RC which is coherent with the short term dynamic of covid-19 epidemic. Trend for other hyperparameter are less clear even though best hyperparameter sets were close for RC with common input scaling and for RC with multiple input scaling.
+As expected, we observe that the optimal leaking rate is above 1e-2 for all RC which is coherent with the short term dynamic of covid-19 epidemic. Trends for other hyperparameters are less clear even though best hyperparameters sets were close for RC with common input scaling and for RC with multiple input scaling.
 
 ```{r ucHyperparam, echo=FALSE}
 #| label: fig-ucHyperparam
@@ -896,7 +902,7 @@ As expected, we observe that the optimal leaking rate is above 1e-2 for all RC w
 ls_use_case$plot_reservoir_hp
 ```
 
-@fig-ucHyperparamMultipleIS shows the hyperparameter search for RC with multiple input scaling and connected input layer. We observe that the random search tend to favor high importance given to derivative of positive RT-PCR (including the elderly) and the derivative of IPTCC. The rest of the feature do not show clear pattern.
+@fig-ucHyperparamMultipleIS shows the hyperparameter search for RC with multiple input scaling and connected input layer. We observe that the random search tends to favor high importance given to derivative of positive RT-PCR (including the elderly) and the derivative of IPTCC. The remaining features do not exhibit a clear pattern.
 
 ```{r ucHyperparamMultipleIS, echo=FALSE}
 #| label: fig-ucHyperparamMultipleIS
@@ -991,11 +997,13 @@ In this specific application, we have demonstrated that RC exhibits commendable 
 
 All computations in this study were conducted using the `reservoirnet` package, and the entire codebase is accessible on Zenodo [@ferte_thomasfertejss_reservoirnet_2024]. This `R` package demonstrates its efficacy in implementing various reservoir architectures, including connection between the input layer and the output layer, as well as the utilization of several input scaling, all within the context of a real-world use case.
 
-Given the substantial number of hyperparameters involved, we acknowledge that random search may not be the most efficient optimization algorithm. We have retained this approach for the sake of simplicity in this tutorial paper; however, meta-heuristic approaches, particularly those utilizing evolutionary algorithms, may prove more efficient, especially when employing multiple input scaling [@bala_applications_2018].
+Given the substantial number of hyperparameters involved, we acknowledge that random search may not be the most efficient optimization algorithm. We have retained this approach for the sake of simplicity in this tutorial paper; however, meta-heuristic approaches, particularly those utilizing evolutionary algorithms, may prove more efficient, especially when employing multiple input scaling [@bala_applications_2018; @ferte_optimizing_2024]. 
 
 This study represents a novel contribution to epidemic forecasting utilizing RC. Notably, previous literature predominantly focused on simpler problems characterized by fewer input features or shorter evaluation periods [@liu_nanophotonic_2023; @ray_optimized_2021; @ghosh_reservoir_2021]. Our findings underscore the potential of this approach for future epidemics, suggesting its potential to surpass more traditional epidemiological tools while maintaining a lightweight model structure compared to other RNNs.
 
-It is worth noting that all models, including the @ferte_benefit_2022 models, encounter challenges in accurately anticipating slope shifts, indicating the need for further investigation. Specifically, additional work is warranted to extend the application of RC to high-dimensional settings, building upon the insights gained from models based on a more extensive set of features.
+It is worth noting that all models, including those presented in @ferte_benefit_2022, face challenges in accurately predicting slope shifts, highlighting the need for further investigation. Specifically, additional work is required to extend the application of Reservoir Computing (RC) to high-dimensional settings, building upon insights gained from models that use a more extensive feature set. While RC has demonstrated promising performance for epidemic forecasting in high-dimensional settings, this task remains challenging [@ferte_reservoir_2024].
+
+A new perspective may emerge from integrating New Generation Computing, a method inspired by RC and nonlinear vector-autoregression, where expert insights into the non-linear components of the model can be directly embedded within the reservoir [@zhang2022catch22s]. Additionally, we observe that reservoir predictions exhibit high instability, requiring the aggregation of multiple predictions to achieve meaningful results. To address this instability, @zhang2024instability suggests implementing stronger penalization techniques that can be updated as more data becomes available or adopting a "training with noise" approach, where noise is added during training for regularization. These approaches could help mitigate instability in reservoir computing as the problem's dimensionality increases.
 
 # Discussion and conclusion {#sec-discussion-and-conclusion}
 

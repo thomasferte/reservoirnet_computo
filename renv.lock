@@ -1247,8 +1247,14 @@
     "reservoirnet": {
       "Package": "reservoirnet",
       "Version": "0.2.0",
-      "Source": "Repository",
+      "Source": "GitHub",
       "Repository": "CRAN",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "reservoirR",
+      "RemoteUsername": "reservoirpy",
+      "RemoteRef": "computo_response",
+      "RemoteSha": "a6756f223639bc6c959157ae070be83ede65a3c0",
       "Requirements": [
         "R",
         "dplyr",
@@ -1261,7 +1267,7 @@
         "rlang",
         "testthat"
       ],
-      "Hash": "0901bede6d899ddc2ce535c6449fd3a8"
+      "Hash": "6a9bb51c717b4ce64a4a2ecbda30e313"
     },
     "reticulate": {
       "Package": "reticulate",

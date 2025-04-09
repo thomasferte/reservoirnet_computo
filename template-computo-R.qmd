@@ -719,7 +719,7 @@ X_test <- japanese_vowels$X_test
 Y_test <- japanese_vowels$Y_test
 ```
 
-Then we can train a simple Echo State Network to solve this task. For this example, we will connect both the input layer and the reservoir layer to the readout layer, which is performed by the `%>>%` operator. This direct connection between the input layer and the output layer can be particularly useful when the relationship between the input sequences and the output is mostly linear, potentially improving performance, especially in tasks where linear dependencies play a significant role. Section @sec-studycase will explore this aspect in more detail through the SARS-CoV-2 prediction task.
+Then we can train a simple Echo State Network to solve this task. For this example, we will connect both the input layer and the reservoir layer to the readout layer, which is performed by the `%>>%` operator. This direct connection between the input layer and the output layer can be particularly useful when the relationship between the input sequences and the output is mostly linear, potentially improving performance, especially in tasks where linear dependencies play a significant role. @sec-studycase will explore this aspect in more detail through the SARS-CoV-2 prediction task.
 
 ```{r}
 # Create an input, a reservoir and an output layers

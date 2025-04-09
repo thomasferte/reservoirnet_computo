@@ -14,7 +14,7 @@
 <meta name="author" content="Rodolphe Thiébaut">
 <meta name="author" content="Xavier Hinaut">
 <meta name="author" content="Boris Hejblum">
-<meta name="dcterms.date" content="2025-04-08">
+<meta name="dcterms.date" content="2025-04-09">
 <meta name="keywords" content="Reservoir Computing, Covid-19, Electronic Health Records, Time series">
 
 <title>Reservoir Computing in R: a Tutorial for Using reservoirnet to Predict Complex Time-Series</title>
@@ -279,14 +279,14 @@ ISSN 2824-7795</p>
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">April 8, 2025</p>
+        <p class="date">April 9, 2025</p>
       </div>
     </div>
                                     
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">April 8, 2025</p>
+        <p class="date-modified">April 9, 2025</p>
       </div>
     </div>
       
@@ -1060,7 +1060,7 @@ Figure&nbsp;11: Prediction in a sequence-to-sequence approach 6 samples with 3 s
 <span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>Y_test <span class="ot">&lt;-</span> japanese_vowels<span class="sc">$</span>Y_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Then we can train a simple Echo State Network to solve this task. For this example, we will connect both the input layer and the reservoir layer to the readout layer, which is performed by the <code>%&gt;&gt;%</code> operator. This direct connection between the input layer and the output layer can be particularly useful when the relationship between the input sequences and the output is mostly linear, potentially improving performance, especially in tasks where linear dependencies play a significant role. Section <a href="#sec-studycase" class="quarto-xref">Section&nbsp;4</a> will explore this aspect in more detail through the SARS-CoV-2 prediction task.</p>
+<p>Then we can train a simple Echo State Network to solve this task. For this example, we will connect both the input layer and the reservoir layer to the readout layer, which is performed by the <code>%&gt;&gt;%</code> operator. This direct connection between the input layer and the output layer can be particularly useful when the relationship between the input sequences and the output is mostly linear, potentially improving performance, especially in tasks where linear dependencies play a significant role. <a href="#sec-studycase" class="quarto-xref">Section&nbsp;4</a> will explore this aspect in more detail through the SARS-CoV-2 prediction task.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Hide/Show the code</summary>
@@ -1826,7 +1826,7 @@ loaded via a namespace (and not attached):
   title = {Reservoir {Computing} in {R:} A {Tutorial} for {Using}
     Reservoirnet to {Predict} {Complex} {Time-Series}},
   journal = {Computo},
-  date = {2025-04-08},
+  date = {2025-04-09},
   url = {https://computo.sfds.asso.fr/template-computo-quarto},
   doi = {xxxx},
   issn = {2824-7795},
@@ -3053,7 +3053,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb36-749"><a href="#cb36-749" aria-hidden="true" tabindex="-1"></a>Y_test <span class="ot">&lt;-</span> japanese_vowels<span class="sc">$</span>Y_test</span>
 <span id="cb36-750"><a href="#cb36-750" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb36-751"><a href="#cb36-751" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-752"><a href="#cb36-752" aria-hidden="true" tabindex="-1"></a>Then we can train a simple Echo State Network to solve this task. For this example, we will connect both the input layer and the reservoir layer to the readout layer, which is performed by the <span class="in">`%&gt;&gt;%`</span> operator. This direct connection between the input layer and the output layer can be particularly useful when the relationship between the input sequences and the output is mostly linear, potentially improving performance, especially in tasks where linear dependencies play a significant role. Section @sec-studycase will explore this aspect in more detail through the SARS-CoV-2 prediction task.</span>
+<span id="cb36-752"><a href="#cb36-752" aria-hidden="true" tabindex="-1"></a>Then we can train a simple Echo State Network to solve this task. For this example, we will connect both the input layer and the reservoir layer to the readout layer, which is performed by the <span class="in">`%&gt;&gt;%`</span> operator. This direct connection between the input layer and the output layer can be particularly useful when the relationship between the input sequences and the output is mostly linear, potentially improving performance, especially in tasks where linear dependencies play a significant role. @sec-studycase will explore this aspect in more detail through the SARS-CoV-2 prediction task.</span>
 <span id="cb36-753"><a href="#cb36-753" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-756"><a href="#cb36-756" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb36-757"><a href="#cb36-757" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an input, a reservoir and an output layers</span></span>

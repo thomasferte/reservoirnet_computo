@@ -14,7 +14,7 @@
 <meta name="author" content="Rodolphe Thiébaut">
 <meta name="author" content="Xavier Hinaut">
 <meta name="author" content="Boris Hejblum">
-<meta name="dcterms.date" content="2025-04-09">
+<meta name="dcterms.date" content="2025-04-14">
 <meta name="keywords" content="Reservoir Computing, Covid-19, Electronic Health Records, Time series">
 
 <title>Reservoir Computing in R: a Tutorial for Using reservoirnet to Predict Complex Time-Series</title>
@@ -279,14 +279,14 @@ ISSN 2824-7795</p>
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">April 9, 2025</p>
+        <p class="date">April 14, 2025</p>
       </div>
     </div>
                                     
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">April 9, 2025</p>
+        <p class="date-modified">April 14, 2025</p>
       </div>
     </div>
       
@@ -398,7 +398,7 @@ Figure&nbsp;1: Reservoir computing is composed of an input layer, a reservoir an
 x( t+1 ) = ( 1 - \alpha )  x ( t) + \alpha \: tanh\left( W x(t) + W_{in} u(t+1)\right).
 \end{equation}</span></p>
 <p>The leaking rate <span class="math inline">\alpha \in [0, 1]</span> defines the update rate of the nodes. The closer <span class="math inline">\alpha</span> is to <span class="math inline">1</span>, the more the reservoir is sensitive to new inputs <span class="math inline">u(t)</span>. Therefore, the reservoir state at time <span class="math inline">t+1</span> denoted <span class="math inline">x(t+1)</span> depends on the reservoir state at the previous time <span class="math inline">x(t)</span> and the new inputs <span class="math inline">u(t+1)</span>. The function <span class="math inline">tanh()</span> represents the activation function, applied element-wise to each component of the vector, ensuring that each node’s activation is scaled between <span class="math inline">-1</span> and <span class="math inline">1</span>. Both <span class="math inline">W_{in}</span> and <span class="math inline">W</span> are random matrices of size <span class="math inline">N_{res} \times M</span> and <span class="math inline">N_{res} \times N_{res}</span> respectively.</p>
-<p><span class="math inline">W_{in}</span> is a matrix (usually sparse) generated using a Bernoulli (bimodal) distribution where each value can be either <span class="math inline">-I_{scale}(m)</span> or <span class="math inline">I_{scale}(m)</span> with an equal probability where <span class="math inline">m = 1, \dots, M</span> corresponds to a given feature in the input layer. The input scaling, denoted <span class="math inline">I_{scale}</span>, is a hyperparameter coefficient common to all features from the input layer or specific to each feature <span class="math inline">m</span>. In that case, the more important the feature is, the greater should be its input scaling. <span class="math inline">W</span> is a matrix (usually sparse) where values are generated from a Gaussian distribution <span class="math inline">\mathcal{N}(0,1)</span>. Then, the <span class="math inline">W</span> matrix is scaled according to the defined spectral radius, a hyperparameter defining the highest eigen value of <span class="math inline">W</span>.</p>
+<p>The input-reservoir connection matrix (<span class="math inline">W_{in}</span>) and the intra-reservoir connection matrix (<span class="math inline">W</span>) are generated in three steps. <span class="math inline">W_{in}</span> is generated using a Bernoulli (bimodal) distribution where each value can be either <span class="math inline">-I_{scale}(m)</span> or <span class="math inline">I_{scale}(m)</span> with an equal probability where <span class="math inline">m = 1, \dots, M</span> corresponds to a given feature in the input layer. The input scaling, denoted <span class="math inline">I_{scale}</span>, is a hyperparameter coefficient common to all features from the input layer or specific to each feature <span class="math inline">m</span>. In that case, the more important the feature is, the greater should be its input scaling. <span class="math inline">W</span> is generated from a Gaussian distribution <span class="math inline">\mathcal{N}(0,1)</span>. Both <span class="math inline">W_{in}</span> and <span class="math inline">W</span> then undergo sparsification, where a connectivity mask is applied to retain only <span class="math inline">10\%</span> of the connections, enforcing sparsity. In a third step, the <span class="math inline">W</span> matrix is scaled according to the defined spectral radius, a hyperparameter defining the highest eigen value of <span class="math inline">W</span>.</p>
 <p>The final layer is a linear regression with ridge penalization where the explanatory features are the reservoir state and the variable to be explained is the outcome to predict such that: <span class="math display">W_{out} = YX^T ( XX^T + \lambda  I)^{ -1 }.</span> Where x(t) and y(t) are accumulated in X and Y respectively such that: <span class="math display">
 X = \begin{bmatrix} x(1) \\ x(2) \\ ... \\ x(T) \end{bmatrix}
 \text{ and } Y = \begin{bmatrix} y(1) \\ y(2) \\ ... \\ y(T) \end{bmatrix}.
@@ -1826,7 +1826,7 @@ loaded via a namespace (and not attached):
   title = {Reservoir {Computing} in {R:} A {Tutorial} for {Using}
     Reservoirnet to {Predict} {Complex} {Time-Series}},
   journal = {Computo},
-  date = {2025-04-09},
+  date = {2025-04-14},
   url = {https://computo.sfds.asso.fr/template-computo-quarto},
   doi = {xxxx},
   issn = {2824-7795},
@@ -2459,7 +2459,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb36-125"><a href="#cb36-125" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-126"><a href="#cb36-126" aria-hidden="true" tabindex="-1"></a>The leaking rate $\alpha \in <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$ defines the update rate of the nodes. The closer $\alpha$ is to $1$, the more the reservoir is sensitive to new inputs $u(t)$. Therefore, the reservoir state at time $t+1$ denoted $x(t+1)$ depends on the reservoir state at the previous time $x(t)$ and the new inputs $u(t+1)$. The function $tanh()$ represents the activation function, applied element-wise to each component of the vector, ensuring that each node’s activation is scaled between $-1$ and $1$. Both $W_{in}$ and $W$ are random matrices of size $N_{res} \times M$ and $N_{res} \times N_{res}$ respectively.</span>
 <span id="cb36-127"><a href="#cb36-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-128"><a href="#cb36-128" aria-hidden="true" tabindex="-1"></a>$W_{in}$ is a matrix (usually sparse) generated using a Bernoulli (bimodal) distribution where each value can be either $-I_{scale}(m)$ or $I_{scale}(m)$ with an equal probability where $m = 1, \dots, M$ corresponds to a given feature in the input layer. The input scaling, denoted $I_{scale}$, is a hyperparameter coefficient common to all features from the input layer or specific to each feature $m$. In that case, the more important the feature is, the greater should be its input scaling. $W$ is a matrix (usually sparse) where values are generated from a Gaussian distribution $\mathcal{N}(0,1)$. Then, the $W$ matrix is scaled according to the defined spectral radius, a hyperparameter defining the highest eigen value of $W$.</span>
+<span id="cb36-128"><a href="#cb36-128" aria-hidden="true" tabindex="-1"></a>The input-reservoir connection matrix ($W_{in}$) and the intra-reservoir connection matrix ($W$) are generated in three steps. $W_{in}$ is generated using a Bernoulli (bimodal) distribution where each value can be either $-I_{scale}(m)$ or $I_{scale}(m)$ with an equal probability where $m = 1, \dots, M$ corresponds to a given feature in the input layer. The input scaling, denoted $I_{scale}$, is a hyperparameter coefficient common to all features from the input layer or specific to each feature $m$. In that case, the more important the feature is, the greater should be its input scaling. $W$ is generated from a Gaussian distribution $\mathcal{N}(0,1)$. Both $W_{in}$ and $W$ then undergo sparsification, where a connectivity mask is applied to retain only $10\%$ of the connections, enforcing sparsity. In a third step, the $W$ matrix is scaled according to the defined spectral radius, a hyperparameter defining the highest eigen value of $W$.</span>
 <span id="cb36-129"><a href="#cb36-129" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-130"><a href="#cb36-130" aria-hidden="true" tabindex="-1"></a>The final layer is a linear regression with ridge penalization where the</span>
 <span id="cb36-131"><a href="#cb36-131" aria-hidden="true" tabindex="-1"></a>explanatory features are the reservoir state and the variable to be</span>
